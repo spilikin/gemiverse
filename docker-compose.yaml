@@ -1,0 +1,6 @@
+version: '3.1'
+services:
+  app:
+    image: spilikin/gemiverse
+    ports:
+      - "4173:4173"
