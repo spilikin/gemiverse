@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { OpenidProvider } from "$lib/fed";
+	import type { OpenidProvider } from "$lib/federations";
 
     import {
         StructuredList,

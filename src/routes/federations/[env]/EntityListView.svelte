@@ -10,6 +10,7 @@
 		StructuredListRow,
 		StructuredListCell,
     } from "carbon-components-svelte";
+    import CloseFilled from "carbon-icons-svelte/lib/CloseFilled.svelte";
 
     function logo(entity: Entity) {
         if (entity.statement?.metadata.openid_provider?.logo_uri) {
@@ -45,17 +46,30 @@
 	</StructuredListHead>
 	<StructuredListBody>
 		{#each entities as entity }
+      {#if entity.error}
+        <StructuredListRow>
+            <StructuredListCell>
+            </StructuredListCell>
+            <StructuredListCell>
+                <div>{entity.iss}</div>
+                <div><CloseFilled fill="red"/> {entity.error.error}</div>
+            </StructuredListCell>
+        </StructuredListRow>
+      {:else}
 			<StructuredListRow on:click={() => openEntity(entity)}>
                 <StructuredListCell class="logoCell">
                     {#if logo(entity)}
                     <img class="logo" src={logo(entity)} alt="Logo"/>
                     {/if}
                 </StructuredListCell>
-				<StructuredListCell>
-                    <div><b>{entity.statement?.metadata.federation_entity?.name}</b></div>
+				        <StructuredListCell>
+                    {#if entity.statement?.metadata.federation_entity?.name}
+                      <div>{entity.statement?.metadata.federation_entity?.name}</div>
+                    {/if}
                     <div>{entity.statement?.iss}</div>
                 </StructuredListCell>
 			</StructuredListRow>
+      {/if}
 		{/each}
 	</StructuredListBody>
 </StructuredList>

@@ -45,7 +45,7 @@
 </script>
 
 <Breadcrumb>
-	<BreadcrumbItem href="/federations">Federation</BreadcrumbItem>
+	<BreadcrumbItem href="/federations">Föderationen</BreadcrumbItem>
 	<BreadcrumbItem isCurrentPage={true}>{getEnvLabel(data.env)}</BreadcrumbItem>
 </Breadcrumb>
 
