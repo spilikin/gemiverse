@@ -1,4 +1,4 @@
-VERSION=0.0.6
+VERSION=0.0.7
 DOCKER_IMAGE=spilikin/gemiverse:latest
 info:
 

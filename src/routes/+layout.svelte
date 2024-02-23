@@ -15,9 +15,10 @@
       SideNavMenuItem,
     } from "carbon-components-svelte";
     let isOpen = false;
+    let isSideNavOpen = true;
   </script>
   
-  <Header company="gematik" platformName="Universe">
+  <Header company="gematik" platformName="Universe" bind:isSideNavOpen>
     <HeaderUtilities>
       <HeaderAction bind:isOpen>
         <HeaderPanelLinks>
@@ -28,7 +29,7 @@
 
   </Header>
   
-  <SideNav fixed={true} isOpen={true}>
+  <SideNav isOpen={isSideNavOpen}>
     <SideNavItems>
         <SideNavMenu text="Federation" expanded={true}>
             <SideNavMenuItem href="/federations/test">Test</SideNavMenuItem>
