@@ -3,7 +3,6 @@
 export default class HttpCache {
     cache: Map<string, Response> = new Map();
 
-
     async fetch(input: RequestInfo | URL, init?: RequestInit | undefined): Promise<Response> {
         if (typeof input === 'string') {
             if (this.cache.has(input)) {
@@ -15,6 +14,10 @@ export default class HttpCache {
             this.cache.set(response.url, response.clone());
             return response;
         })
+    }
+
+    clear() {
+        this.cache.clear();
     }
 }
     
