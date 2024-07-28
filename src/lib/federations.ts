@@ -143,13 +143,16 @@ function redirectURIs(statement: EntityStatement): string[] {
 
 export async function fetchEntity(iss: string) {
     const statement = await fetchEntityStatement(iss)
-    var androidLinks = await fetchAndroidLinks(statement)
-    var appleLinks = await fetchAppleAppLinks(statement)
+    let androidLinks = await fetchAndroidLinks(statement)
+    let distinctAndroidLinks = Array.from(new Set(androidLinks.map(link => JSON.stringify(link)))).map(link => JSON.parse(link))
+    let appleLinks = await fetchAppleAppLinks(statement)
+    let distinctAppleLinks = Array.from(new Set(appleLinks.map(link => JSON.stringify(link)))).map(link => JSON.parse(link))
     return {
         iss: iss,
         statement: statement,
-        androidLinks: androidLinks,
-        appleLinks: appleLinks
+        androidLinks: distinctAndroidLinks,
+        appleLinks: distinctAppleLinks
+        
     }
 }
 
@@ -157,6 +160,14 @@ export async function fetchEntity(iss: string) {
 export interface AppleAppLink {
     appIDs: string[]
     components: Map<string, string>[]
+}
+
+// parse string to URL
+function isLocalhost(url: URL) {
+    if (url.hostname == 'localhost' || url.hostname == '127.0.0.1') {
+        return true
+    }
+    return false
 }
 
 export async function fetchAppleAppLinks(stmt: EntityStatement) {
@@ -167,6 +178,9 @@ export async function fetchAppleAppLinks(stmt: EntityStatement) {
   const promises = uris.map(url => {
     // create base URL
     var wellknownURL = new URL(url)
+    if (isLocalhost(wellknownURL)) {
+        return [] as AppleAppLink[]
+    }
     wellknownURL.pathname = '/.well-known/apple-app-site-association'
     console.log('fetching', wellknownURL.href)
     return cache.fetch(wellknownURL.href).
@@ -195,6 +209,9 @@ export async function fetchAndroidLinks(stmt: EntityStatement): Promise<AndroidA
     // create base URL
     console.log('Android fetch', url)
     var wellknownURL = new URL(url)
+    if (isLocalhost(wellknownURL)) {
+        return [] as AndroidAppAsset[]
+    }
     wellknownURL.pathname = '/.well-known/assetlinks.json'
     console.log('fetching', wellknownURL.href)
     return cache.fetch(wellknownURL.href)

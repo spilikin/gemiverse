@@ -1,4 +1,4 @@
-FROM node:18 as build
+FROM node:20 as build
 
 WORKDIR /app
 
@@ -7,12 +7,11 @@ WORKDIR /app
 #RUN npm install -g vite
 COPY package.json ./
 RUN npm install
-RUN ls node_modules
 COPY . ./
 RUN npm run build
 
 
-FROM node:18-alpine
+FROM node:20
 
 WORKDIR /app
 COPY --from=build /app .

@@ -9,6 +9,7 @@
 		StructuredListBody,
 		StructuredListRow,
 		StructuredListCell,
+        ImageLoader,
     } from "carbon-components-svelte";
     import CloseFilled from "carbon-icons-svelte/lib/CloseFilled.svelte";
 
@@ -59,7 +60,7 @@
 			<StructuredListRow on:click={() => openEntity(entity)}>
                 <StructuredListCell class="logoCell">
                     {#if logo(entity)}
-                    <img class="logo" src={logo(entity)} alt="Logo"/>
+                    <ImageLoader src={logo(entity)} alt="Logo" class="logo"/>
                     {/if}
                 </StructuredListCell>
 				        <StructuredListCell>

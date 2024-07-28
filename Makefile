@@ -1,4 +1,4 @@
-VERSION=0.0.7
+VERSION=0.0.8
 DOCKER_IMAGE=spilikin/gemiverse:latest
 info:
 
@@ -10,7 +10,7 @@ version:
 	@echo "export const BuildDate = \"$(shell date +"%Y-%m-%d %H:%M")\";" >> src/lib/version.ts
 
 dockerbuild: version
-	docker buildx build --platform linux/amd64 -t $(DOCKER_IMAGE) .
+	docker buildx build --no-cache --platform linux/amd64 -t $(DOCKER_IMAGE) .
 
 dockerpush: dockerbuild
 	docker push $(DOCKER_IMAGE)
