@@ -44,5 +44,9 @@ configs:
         email cloud@spilikin.dev
       }
       gemiverse.spilikin.dev {
+        @blocked {
+          path /_internal/*
+        }
+        respond @blocked 404
         reverse_proxy app:3000
       }
