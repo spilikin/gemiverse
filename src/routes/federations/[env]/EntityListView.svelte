@@ -2,14 +2,14 @@
     import { type Entity, encodeEntityIdentifier } from '$lib/federations';
     import { goto } from '$app/navigation';
     export let env = '';
-	export let entities: Entity[] = [];
-	import {
-		StructuredList,
-		StructuredListHead,
-		StructuredListBody,
-		StructuredListRow,
-		StructuredListCell,
-        ImageLoader,
+    export let entities: Entity[] = [];
+    import {
+      StructuredList,
+      StructuredListHead,
+      StructuredListBody,
+      StructuredListRow,
+      StructuredListCell,
+      Tag,
     } from "carbon-components-svelte";
     import CloseFilled from "carbon-icons-svelte/lib/CloseFilled.svelte";
 
@@ -28,20 +28,16 @@
 </script>
 
 <style>
-    .logo {
-        max-height: 64px;
-        max-width: 90px;
-        vertical-align: middle;
-    }
     :global(.logoCell) {
         width: 95px;
-    }        
+    }
+
 </style>
 
 <StructuredList selection>
 	<StructuredListHead>
 		<StructuredListRow head>
-			<StructuredListCell head></StructuredListCell>
+			<StructuredListCell head>Typ</StructuredListCell>
 			<StructuredListCell head>Teilnehmer</StructuredListCell>
 		</StructuredListRow>
 	</StructuredListHead>
@@ -50,6 +46,7 @@
       {#if entity.error}
         <StructuredListRow>
             <StructuredListCell>
+                <Tag type="red">Error</Tag>
             </StructuredListCell>
             <StructuredListCell>
                 <div>{entity.iss}</div>
@@ -59,13 +56,22 @@
       {:else}
 			<StructuredListRow on:click={() => openEntity(entity)}>
                 <StructuredListCell class="logoCell">
+                    <!--
                     {#if logo(entity)}
                     <img src={logo(entity)} alt="Logo" class="logo"/>
                     {/if}
+                    -->
+                    {#if entity.type === 'openid_provider'}
+                        <Tag type="green">IDP</Tag>
+                    {:else}
+                        <Tag type="blue">RP</Tag>
+                    {/if}
                 </StructuredListCell>
 				        <StructuredListCell>
-                    {#if entity.statement?.metadata.federation_entity?.name}
-                      <div>{entity.statement?.metadata.federation_entity?.name}</div>
+                    {#if entity.type === 'openid_provider'}
+                        <div>{entity.statement?.metadata.federation_entity?.name}</div>
+                    {:else}
+                        <div>{entity.statement?.metadata.openid_relying_party?.client_name}</div>
                     {/if}
                     <div>{entity.statement?.iss}</div>
                 </StructuredListCell>

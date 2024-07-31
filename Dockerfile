@@ -5,7 +5,7 @@ WORKDIR /app
 #RUN npm install @rollup/rollup-linux-x64-gnu
 #RUN npm install -g @sveltejs/kit
 #RUN npm install -g vite
-COPY package.json ./
+COPY package*.json ./
 RUN npm install
 COPY . ./
 RUN npm run build

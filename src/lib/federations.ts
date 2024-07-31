@@ -6,13 +6,9 @@ export function encodeEntityIdentifier(statement: EntityStatement) {
 }
 
 export function decodeEntityIdentifier(entityId: string) {
-    return "https://"+entityId.replace('$', '/')
+    return "https://"+entityId.replaceAll('$', '/')
 }
 
-export interface OpenidProviderExtra {
-    jwks?: jose.JSONWebKeySet
-    certificates?: Array<X509Certificate | null>
-}
 export interface FederationEntity {
     federation_fetch_endpoint?: string
     federation_list_endpoint?: string
@@ -45,7 +41,6 @@ export interface OpenidProvider {
     response_modes_supported: string[]
     user_type_supported: string[]
     token_endpoint: string
-    extra: OpenidProviderExtra
 }
 
 export interface OpenidRelyingParty {
@@ -95,12 +90,27 @@ export interface AppleAppLink {
     components: Map<string, string>[]
 }
 
+export interface HostInfo {
+  name: string
+  certificates?: CertificateInfo[]
+}
+
+// enumeration for entity type (openid_provider, openid_relying_party)
+export enum EntityType {
+    OpenidProvider = "openid_provider",
+    OpenidRelyingParty = "openid_relying_party"
+}
 export interface Entity {
+    id: string
+    type: EntityType
     iss: string
     error?: Error
     statement?: EntityStatement
     androidLinks?: AndroidAppAsset[]
     appleLinks?: AppleAppLink[]
+    jwks?: jose.JSONWebKeySet
+    jwksCertificates?: Array<CertificateInfo[]>
+    hosts?: HostInfo[]
 }
 
 export interface EntityStatement {
@@ -116,12 +126,39 @@ export interface Federation {
     entities: Entity[]
 }
 
-export interface X509Certificate {
+export interface CertificateInfo {
     subject: string
     issuer: string
     serialNumber: string
     keyType?: string
-    namedCurve?: string
+    keyAlg?: string
     notBefore: Date
     notAfter: Date
+}
+
+export function parseDistinguishedName(dn: string): Map<string, string[]> {
+    // Replace the pattern with a delimiter
+    let replacedStr = dn.replace(/([a-zA-Z]+)=/g, '|$1|');
+
+    // Split the string using the delimiter
+    let parts = replacedStr.split('|').map(s => s.trim());
+
+    if (parts[0] === '') {
+        parts.shift()
+    }
+
+    // Create a map of the key value pairs
+    let result = new Map<string, string[]>();
+
+    for (let i = 0; i < parts.length; i += 2) {
+        let key = parts[i];
+        let value = parts[i + 1];
+        if (result.has(key)) {
+            result.get(key)?.push(value)
+        } else {
+            result.set(key, [value])
+        }
+    }
+
+    return result
 }

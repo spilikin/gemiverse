@@ -1,0 +1,14 @@
+services:
+  
+  controller:
+    build: ./controller
+    ports:
+      - "3001:80"
+    volumes:
+      - ./controller/cert.cgi:/var/www/localhost/htdocs/cert.cgi
+
+  cache:
+    image: redis
+    ports:
+      - "6379:6379"
+

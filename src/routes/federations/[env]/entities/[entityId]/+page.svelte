@@ -6,11 +6,12 @@
 
 	export let data: PageData;
 	import {
-		Breadcrumb,
+		    Breadcrumb,
         BreadcrumbItem,
         Tabs,
         Tab,
         TabContent,
+		    Tag,
     } from "carbon-components-svelte";
 	import OpenidProviderView from './OpenidProviderView.svelte';
 	import OpenidRelyingPartyView from './OpenidRelyingPartyView.svelte';
@@ -18,7 +19,15 @@
 	import { onMount } from 'svelte';
 
   function name() {
-      return data.entity.statement?.metadata.federation_entity?.name ?? data.entity.statement?.iss;
+      if (data.entity.statement?.metadata.openid_provider) {
+          return data.entity.statement?.metadata.federation_entity?.name || data.entity.statement?.iss;
+      } else if (data.entity.statement?.metadata.openid_relying_party) {
+          return data.entity.statement?.metadata.openid_relying_party?.client_name;
+      }
+  }
+
+  function iss() {
+      return data.entity.statement?.iss;
   }
 
   onMount(() => {
@@ -36,24 +45,39 @@
   }
 </script>
 
+<style>
+  h4 {
+    margin-top: 1em;
+  }
+  :global(.tabs) {
+    margin-top: 1em;
+  }
+</style>
+
 <Breadcrumb noTrailingSlash={true}>
     <BreadcrumbItem href="/federations">Föderationen</BreadcrumbItem>
     <BreadcrumbItem href="/federations/{data.env}">{getEnvLabel(data.env)}</BreadcrumbItem>
     <BreadcrumbItem isCurrentPage={true}>{name()}</BreadcrumbItem>
 </Breadcrumb>
 
-<h2>{name()}</h2>
+{#if data.entity.type == 'openid_provider'}
+<h4>{name()}</h4>
+<Tag type="green">OpenID Provider</Tag>
+{:else}
+<h4>{name()}</h4>
+<Tag type="blue">Relying Party</Tag>
+{/if}
 
-<Tabs>
+<Tabs class="tabs">
     <Tab label="Allgemein" href="#general" on:click={tabClick}/>
     <Tab label="Apps" href="#apps" on:click={tabClick}/>
     <Tab label="Rohdaten" href="#raw" on:click={tabClick}/>
 	<svelte:fragment slot="content">
 	  <TabContent>
         {#if data.entity.statement?.metadata.openid_provider}
-            <OpenidProviderView jwk={data.entity.statement?.jwks?.keys[0]} op={data.entity.statement?.metadata.openid_provider}/>
+            <OpenidProviderView entity={data.entity} op={data.entity.statement?.metadata.openid_provider}/>
         {:else if data.entity.statement?.metadata.openid_relying_party}
-            <OpenidRelyingPartyView jwk={data.entity.statement?.jwks?.keys[0]} rp={data.entity.statement?.metadata.openid_relying_party}/>
+            <OpenidRelyingPartyView entity={data.entity} rp={data.entity.statement?.metadata.openid_relying_party}/>
         {:else}
         Unbekannter Objekttyp
         {/if}

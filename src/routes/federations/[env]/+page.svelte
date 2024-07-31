@@ -17,7 +17,23 @@
 	import EntityListView from './EntityListView.svelte';
 	import MasterView from './MasterView.svelte';
 	import type { Entity } from '$lib/federations';
-	
+  import { onMount } from 'svelte';
+  import { goto } from '$app/navigation';
+
+  onMount(() => {
+    const hash = window.location.hash;
+    if (hash) {
+      const tab = document.querySelector(`a[href="${hash}"]`);
+      if (tab) {
+        (tab as HTMLAnchorElement).click();
+      }
+    }
+  });
+
+  function tabClick(event: MouseEvent) {
+    goto((event.target as HTMLAnchorElement).href, { replaceState: true})
+  }
+
 	beforeNavigate(() => {
 		loading = true;
 	});
@@ -50,17 +66,14 @@
 </Breadcrumb>
 
 
-{#if loading}
-<Loading/>
-{:else}
 <h2>{getEnvLabel(data.env)}-Föderation</h2>
 <h4>{data.fed.master.iss}</h4>
-<Tabs triggerHref="#">
-	<Tab label="Alle" id="all"/>
-	<Tab label="Identity Provider" href="#op" />
-	<Tab label="Dienste" href="#rp"/>
-	<Tab label="Master" href="#master"/>
-	<Tab label="Rohdaten" href="#raw"/>
+<Tabs class="tabs">
+	<Tab label="Alle" href="#all" on:click={tabClick}/>
+	<Tab label="Identity Provider" href="#idp" on:click={tabClick}/>
+	<Tab label="Dienste" href="#rp" on:click={tabClick}/>
+	<Tab label="Master" href="#master" on:click={tabClick}/>
+	<Tab label="Rohdaten" href="#raw" on:click={tabClick}/>
 	<svelte:fragment slot="content">
 	  <TabContent><EntityListView env={data.env} entities={getAll()} /></TabContent>
 	  <TabContent><EntityListView env={data.env} entities={getIdentityProviders()} /></TabContent>
@@ -69,5 +82,4 @@
 	  <TabContent><RawDataView content={data.fed}/></TabContent>
 	</svelte:fragment>
 </Tabs>
-{/if}
 

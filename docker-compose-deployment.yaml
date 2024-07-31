@@ -8,6 +8,11 @@ services:
       - source: Caddyfile
         target: /etc/caddy/Caddyfile
     restart: always
+    depends_on:
+      - app
+    volumes:
+      - ./caddy_data:/data
+      - ./caddy_config:/config
   
   controller:
     build: ./controller
@@ -18,14 +23,19 @@ services:
 
 
   cache:
-    image: docker.dragonflydb.io/dragonflydb/dragonfly
-    ports:
-      - "6379:6379"
+    image: redis:alpine
+    restart: always
 
   app:
     image: spilikin/gemiverse
     ports:
-      - "4173:4173"
+      - "3000:3000"
+    depends_on:
+      - cache
+      - controller
+    environment:
+      - REDIS_HOST=cache
+      - CONTROLLER_URL=http://controller
     
 configs:
   Caddyfile:
@@ -34,5 +44,5 @@ configs:
         email cloud@spilikin.dev
       }
       gemiverse.spilikin.dev {
-        reverse_proxy app:4173
+        reverse_proxy app:3000
       }
