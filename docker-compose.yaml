@@ -1,29 +1,38 @@
-version: '3.1'
 services:
   reverse-proxy:
-    # The official v2 Traefik docker image
-    image: traefik:v2.11
-    # Enables the web UI and tells Traefik to listen to docker
-    command: 
-      - "--log.level=DEBUG"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.websecure.address=:443"
-      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
-      #- "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
-      - "--certificatesresolvers.myresolver.acme.email=cloud@spilikin.dev"
-      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+    image: caddy:latest
     ports:
+      - "80:80"
       - "443:443"
+    configs:
+      - source: Caddyfile
+        target: /etc/caddy/Caddyfile
+    restart: always
+  
+  controller:
+    build: ./controller
+    ports:
+      - "3001:80"
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - "./letsencrypt:/letsencrypt"
+      - ./controller/cert.cgi:/var/www/localhost/htdocs/cert.cgi
+
+
+  cache:
+    image: docker.dragonflydb.io/dragonflydb/dragonfly
+    ports:
+      - "6379:6379"
+
   app:
     image: spilikin/gemiverse
     ports:
       - "4173:4173"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.app.rule=Host(`gemiverse.spilikin.dev`)"
-      - "traefik.http.routers.app.entrypoints=websecure"
-      - "traefik.http.routers.app.tls.certresolver=myresolver"
+    
+configs:
+  Caddyfile:
+    content: |
+      {
+        email cloud@spilikin.dev
+      }
+      gemiverse.spilikin.dev {
+        reverse_proxy app:4173
+      }

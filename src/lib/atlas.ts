@@ -1,5 +1,5 @@
 export default {
-    fed: {
+    federations: {
         "test": {
             url: "https://app-test.federationmaster.de"
         },

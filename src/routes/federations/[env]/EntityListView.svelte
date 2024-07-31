@@ -1,5 +1,5 @@
 <script lang="ts">	
-    import { type Entity, entityIdentifier } from '$lib/federations';
+    import { type Entity, encodeEntityIdentifier } from '$lib/federations';
     import { goto } from '$app/navigation';
     export let env = '';
 	export let entities: Entity[] = [];
@@ -23,13 +23,13 @@
     }
 
     function openEntity(entity: Entity) {
-        goto(`/federations/${env}/entities/${entityIdentifier(entity.statement!)}`)
+        goto(`/federations/${env}/entities/${encodeEntityIdentifier(entity.statement!)}`)
     }
 </script>
 
 <style>
     .logo {
-        max-height: 50px;
+        max-height: 64px;
         max-width: 90px;
         vertical-align: middle;
     }
@@ -53,14 +53,14 @@
             </StructuredListCell>
             <StructuredListCell>
                 <div>{entity.iss}</div>
-                <div><CloseFilled fill="red"/> {entity.error.error}</div>
+                <div><CloseFilled fill="red"/> {entity.error.error_description}</div>
             </StructuredListCell>
         </StructuredListRow>
       {:else}
 			<StructuredListRow on:click={() => openEntity(entity)}>
                 <StructuredListCell class="logoCell">
                     {#if logo(entity)}
-                    <ImageLoader src={logo(entity)} alt="Logo" class="logo"/>
+                    <img src={logo(entity)} alt="Logo" class="logo"/>
                     {/if}
                 </StructuredListCell>
 				        <StructuredListCell>
