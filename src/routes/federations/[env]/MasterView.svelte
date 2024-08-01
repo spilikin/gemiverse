@@ -10,8 +10,8 @@
         CodeSnippet
     } from "carbon-components-svelte";
 
-    function toPrettyJSON(){
-        return JSON.stringify(fed.master.jwks?.keys[0], null, 2);
+    function toPrettyJSON(o: object | undefined) {
+        return JSON.stringify(o, null, 2);
     }
 </script>
 
@@ -46,7 +46,7 @@
                 Public key
             </StructuredListCell>
             <StructuredListCell class="value">
-                <CodeSnippet type="multi" light={true} expanded>{toPrettyJSON()}</CodeSnippet>
+                <CodeSnippet type="multi" light={true} expanded>{toPrettyJSON(fed.master.jwks?.keys[0])}</CodeSnippet>
             </StructuredListCell>
         </StructuredListRow>
     </StructuredListBody>

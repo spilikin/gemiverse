@@ -5,7 +5,6 @@
 	export let data: PageData;
 	export let loading = true;
 	import {
-		Loading,
 		Breadcrumb,
 		BreadcrumbItem,
 		Tabs,
@@ -16,9 +15,8 @@
 	import RawDataView from './RawDataView.svelte';
 	import EntityListView from './EntityListView.svelte';
 	import MasterView from './MasterView.svelte';
-	import type { Entity } from '$lib/federations';
-  import { onMount } from 'svelte';
-  import { goto } from '$app/navigation';
+  	import { onMount } from 'svelte';
+  	import { goto } from '$app/navigation';
 
   onMount(() => {
     const hash = window.location.hash;
@@ -42,22 +40,6 @@
 		loading = false;
 	});
 
-	function sortEntities(a: Entity, b: Entity) {
-		return (a.statement?.metadata.federation_entity?.name ?? "").localeCompare(b.statement?.metadata.federation_entity?.name ?? "");
-	}
-
-	function getAll() {
-		return data.fed.entities.sort(sortEntities);
-	}
-
-	function getIdentityProviders() {
-		return data.fed.entities.filter((entity) => entity.statement?.metadata.openid_provider !== undefined).sort(sortEntities);
-	}
-
-	function getRelyingParties() {
-		return data.fed.entities.filter((entity) => entity.statement?.metadata.openid_relying_party !== undefined).sort(sortEntities);
-	}
-
 </script>
 
 <Breadcrumb>
@@ -75,9 +57,9 @@
 	<Tab label="Master" href="#master" on:click={tabClick}/>
 	<Tab label="Rohdaten" href="#raw" on:click={tabClick}/>
 	<svelte:fragment slot="content">
-	  <TabContent><EntityListView env={data.env} entities={getAll()} /></TabContent>
-	  <TabContent><EntityListView env={data.env} entities={getIdentityProviders()} /></TabContent>
-	  <TabContent><EntityListView env={data.env} entities={getRelyingParties()} /></TabContent>
+	  <TabContent><EntityListView env={data.env} entities={data.allEntities} /></TabContent>
+	  <TabContent><EntityListView env={data.env} entities={data.opEntities} /></TabContent>
+	  <TabContent><EntityListView env={data.env} entities={data.rpEntities} /></TabContent>
 	  <TabContent><MasterView fed={data.fed}/></TabContent>
 	  <TabContent><RawDataView content={data.fed}/></TabContent>
 	</svelte:fragment>

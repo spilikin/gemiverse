@@ -96,6 +96,9 @@
           <p><WarningAltFilled fill="orange"/> Keine Apple Apps verknüpft</p>
         {/if}
         {#each data.entity.appleLinks ?? [] as link}
+            {#if link.appID}
+              <p>{link.appID}</p>
+            {/if}
             {#each link.appIDs || [] as appID}
               <p>{appID}</p>
             {/each}            

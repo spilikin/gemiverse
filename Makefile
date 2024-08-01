@@ -1,4 +1,4 @@
-VERSION=2.0.0-beta3
+VERSION=2.0.0-beta5
 DOCKER_IMAGE=spilikin/gemiverse:latest
 info:
 

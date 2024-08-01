@@ -11,7 +11,7 @@ function openRedis() {
   return _redis
 }
 
-export async function loadObjectFromCache<T>(key: string, forceFetch: boolean, fetch: (() => Promise<T | null>), exp: number = undefined): Promise<T | null> {
+export async function loadObjectFromCache<T>(key: string, forceFetch: boolean, fetch: (() => Promise<T | null>), exp: number | undefined = undefined): Promise<T | null> {
     let redis = openRedis()
     let cache = async (obj: T) => {
         if (exp) {

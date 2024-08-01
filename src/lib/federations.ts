@@ -86,7 +86,8 @@ export interface AndroidApp {
 } 
 
 export interface AppleAppLink {
-    appIDs: string[]
+    appID?: string
+    appIDs?: string[]
     components: Map<string, string>[]
 }
 

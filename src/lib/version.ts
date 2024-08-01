@@ -1,2 +1,2 @@
-export const AppVersion = "2.0.0-beta3";
-export const BuildDate = "2024-07-31 21:13";
+export const AppVersion = "2.0.0-beta5";
+export const BuildDate = "2024-08-01 17:41";
