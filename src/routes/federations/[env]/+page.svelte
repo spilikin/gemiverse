@@ -47,7 +47,6 @@
 	<BreadcrumbItem isCurrentPage={true}>{getEnvLabel(data.env)}</BreadcrumbItem>
 </Breadcrumb>
 
-
 <h2>{getEnvLabel(data.env)}-Föderation</h2>
 <h4>{data.fed.master.iss}</h4>
 <Tabs class="tabs">

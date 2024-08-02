@@ -18,6 +18,10 @@
     let isSideNavOpen = true;
   </script>
   
+  <velte:head>
+    <title>gematik Universe</title>
+  </velte:head>
+  
   <Header company="gematik" platformName="Universe" bind:isSideNavOpen>
     <HeaderUtilities>
       <HeaderAction bind:isOpen>
