@@ -1,6 +1,6 @@
 import Atlas from './atlas'
 import * as jose from 'jose'
-import { encodeEntityIdentifier, EntityType, type Entity, type EntityStatement, type Federation, type CertificateInfo, type AndroidAppAsset, type AppleAppLink } from './federations'
+import { encodeEntityIdentifier, EntityType, type Entity, type EntityStatement, type Federation, type CertificateInfo, type AndroidAppAsset, type AppleAppLink, type AndroidApp } from './federations'
 import { httpInitForURL } from './api_key.server'
 import { loadObjectFromCache } from '$lib/cache.server'
 import crypto from "crypto"
@@ -225,7 +225,7 @@ function getAppBaseUrls(statement: EntityStatement): string[] {
     result.add(new URL(statement.metadata.openid_provider.authorization_endpoint).origin)
     result.add(new URL(statement.metadata.openid_provider.token_endpoint).origin)
   }
-  return Array.from(result)
+  return Array.from(result).filter(url => url != null && url != '' && url != 'null')
 }
 
 async function fetchAndroidLinks(stmt: EntityStatement): Promise<AndroidAppAsset[]> {
@@ -236,7 +236,24 @@ async function fetchAndroidLinks(stmt: EntityStatement): Promise<AndroidAppAsset
     return loadObjectFromCache<string>(url, false, async () => {
       return axios.get(url, {insecureHTTPParser: true}).then(res => JSON.stringify(res.data))
     }, 60)
-    .then(json => JSON.parse(json!) as AndroidAppAsset[])
+    .then(json => {
+      let obj = JSON.parse(json!)
+      if (obj instanceof Array) {
+        return obj.map((asset: any) => {
+          return {
+            namespace: asset['namespace'],
+            relation: asset['relation'],
+            target: {
+              namespace: asset['target']['namespace'],
+              package_name: asset['target']['package_name'],
+              sha256_cert_fingerprints: asset['target']['sha256_cert_fingerprints']
+            } as AndroidApp
+          } as AndroidAppAsset
+        })
+      } else {
+        return [] as AndroidAppAsset[]
+      }
+    })
     .catch(err => {
       console.error('error fetching', url, err.message)
       return [] as AndroidAppAsset[]
@@ -265,51 +282,6 @@ async function fetchAppleAppLinks(stmt: EntityStatement): Promise<AppleAppLink[]
 
     return (await Promise.all(promises)).flat()
 }
-/*
-
-export async function fetchAppleAppLinks(stmt: EntityStatement) {
-  var uris = redirectURIs(stmt)
-  uris.push(stmt.iss)
-
-
-  const promises = uris.map(url => {
-    // create base URL
-    var wellknownURL = new URL(url)
-    if (isLocalhost(wellknownURL)) {
-        return [] as AppleAppLink[]
-    }
-    wellknownURL.pathname = '/.well-known/apple-app-site-association'
-    console.log('fetching', wellknownURL.href)
-    return cache.fetch(wellknownURL.href).
-      then(res => {
-          if (!res.ok) {
-            throw new Error(`HTTP Error ${res.status} ${res.statusText}`)
-          }
-          return res.json()
-      })
-      .then(json => json['applinks']['details'] as AppleAppLink)
-      .catch(err => {
-        console.error('error fetching', wellknownURL.href)
-        //console.error(err)
-        return [] as AppleAppLink[]
-      })
-    })
-
-    return (await Promise.all(promises)).flat()
-}
-
-
-
-var federationCache = new Map<string, Federation>()
-
-    */
-
-/*
-export function getFederation(env: string): Federation | undefined {
-    console.log('get federation', env, 'from cache')
-    return federationCache.get(env)
-}
-*/
 
 export async function prefetchFederationCache() {
     var promises = []

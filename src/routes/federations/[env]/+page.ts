@@ -2,7 +2,7 @@ import type { PageLoad } from './$types';
 import type { Entity, Federation } from '$lib/federations';
 
 function sortEntities(a: Entity, b: Entity) {
-    return (a.statement?.metadata.federation_entity?.name ?? "").localeCompare(b.statement?.metadata.federation_entity?.name ?? "");
+    return (a.statement?.metadata.federation_entity?.name ?? "").localeCompare(b.statement?.metadata.openid_relying_party?.client_name ?? "");
 }
 
 export const load: PageLoad = ({ fetch, params }) => {
