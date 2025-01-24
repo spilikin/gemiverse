@@ -73,7 +73,7 @@
                     {:else}
                         <div>{entity.statement?.metadata.openid_relying_party?.client_name}</div>
                     {/if}
-                    <div>{entity.statement?.iss}</div>
+                    <div>{entity.iss}</div>
                 </StructuredListCell>
 			</StructuredListRow>
       {/if}
