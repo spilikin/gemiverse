@@ -1,4 +1,4 @@
-VERSION=0.0.8
+VERSION=2.0.1
 DOCKER_IMAGE=spilikin/gemiverse:latest
 info:
 
@@ -10,13 +10,16 @@ version:
 	@echo "export const BuildDate = \"$(shell date +"%Y-%m-%d %H:%M")\";" >> src/lib/version.ts
 
 dockerbuild: version
+	npm update
 	docker buildx build --no-cache --platform linux/amd64 -t $(DOCKER_IMAGE) .
 
 dockerpush: dockerbuild
 	docker push $(DOCKER_IMAGE)
 
 deploy: 
-	scp docker-compose.yaml gemiverse.spilikin.dev:.
+	scp docker-compose-deployment.yaml gemiverse.spilikin.dev:docker-compose.yaml
+	scp -r ./controller gemiverse.spilikin.dev:.
 	ssh gemiverse.spilikin.dev docker-compose pull
-	ssh gemiverse.spilikin.dev docker-compose down
+	ssh gemiverse.spilikin.dev docker-compose build
+	ssh gemiverse.spilikin.dev docker-compose down --remove-orphans
 	ssh gemiverse.spilikin.dev docker-compose up -d

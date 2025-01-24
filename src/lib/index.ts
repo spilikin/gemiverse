@@ -1,8 +1,3 @@
-// simple service to fetch data from the server using standard fetch api
-export function fetchData(env: string) {
-  return "Hello Typescript";
-}
-
 export function getEnvLabel(env: string) {
     switch (env) {
         case 'test':

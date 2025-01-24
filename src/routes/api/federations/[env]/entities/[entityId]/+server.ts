@@ -1,11 +1,9 @@
-import { fetchEntity } from '$lib/federations';
+import { decodeEntityIdentifier } from '$lib/federations';
+import { getEntity } from '$lib/federations.server';
 import { json } from '@sveltejs/kit';
 
 export async function GET(event) {
-    const entityId = event.params.entityId;
-    // restore the iss url by prepending https:// and replaxxing $ with /
-    const iss = "https://"+entityId.replaceAll('$', '/');
-    console.log('fetching entity', entityId, 'as', iss)
-    const entity = await fetchEntity(iss)
+    const iss = decodeEntityIdentifier(event.params.entityId)
+    const entity = await getEntity(event.params.env, iss, true)
     return json(entity);
 }

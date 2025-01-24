@@ -1,7 +1,7 @@
-import { updateCache } from "$lib/federations";
+//import { updateCache } from "$lib/federations";
 
 // execute once on first run
-await updateCache();
+//await updateCache();
 
 // execute every 60 minutes
-setInterval(updateCache, 60 * 60 * 1000);
+//setInterval(updateCache, 60 * 60 * 1000);
