@@ -32,6 +32,19 @@
         width: 95px;
     }
 
+    .cidi {
+        font-size: 0.8em;
+        color: #666;
+        background-color: #f4f4f4;
+        font-family: monospace;
+        display: inline-block;
+        padding-right: 0.5em;
+        padding-left: 0.5em;
+        padding-top: 0.2em;
+        padding-bottom: 0.2em;
+        border-radius: 15%;
+    }
+
 </style>
 
 <StructuredList selection>
@@ -70,10 +83,12 @@
 				        <StructuredListCell>
                     {#if entity.type === 'openid_provider'}
                         <div>{entity.statement?.metadata.federation_entity?.name}</div>
-                    {:else}
+                        <div>{entity.iss}</div>
+                        {:else}
                         <div>{entity.statement?.metadata.openid_relying_party?.client_name}</div>
+                        <div>{entity.iss}</div>
+                        <div><div class="cidi">{entity.cidi}</div></div>
                     {/if}
-                    <div>{entity.iss}</div>
                 </StructuredListCell>
 			</StructuredListRow>
       {/if}

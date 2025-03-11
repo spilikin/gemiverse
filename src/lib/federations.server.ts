@@ -5,6 +5,7 @@ import { httpInitForURL } from './api_key.server'
 import { loadObjectFromCache } from '$lib/cache.server'
 import crypto from "crypto"
 import axios from 'axios';
+import { crc32 } from 'zlib'
 
 
 const CONTROLLER_URL = process.env.CONTROLLER_URL || 'http://localhost:3001'
@@ -61,6 +62,7 @@ async function fetchEntityBase(iss: string): Promise<Entity> {
   const statement = await fetchEntityStatement(iss)
   return {
     id: encodeEntityIdentifier(statement),
+    cidi: calculateCidi(statement),
     type: statement.metadata.openid_provider ? EntityType.OpenidProvider : EntityType.OpenidRelyingParty,
     iss: iss,
     statement: statement,
@@ -289,4 +291,8 @@ export async function prefetchFederationCache() {
         promises.push(getFederation(env, true))
     }
     await Promise.all(promises)
+}
+
+function calculateCidi(statement: EntityStatement): string {
+  return crc32(statement.iss).toString()
 }

@@ -103,6 +103,7 @@ export enum EntityType {
 }
 export interface Entity {
     id: string
+    cidi: string
     type: EntityType
     iss: string
     error?: Error
