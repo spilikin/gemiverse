@@ -1,5 +1,6 @@
 <script lang="ts">
-	  import type { CertificateInfo, Entity, OpenidRelyingParty } from "$lib/federations";
+    import type { CertificateInfo } from "$lib/x509";
+    import type { Entity, OpenidRelyingParty } from "$lib/federations";
 
     import {
         StructuredList,

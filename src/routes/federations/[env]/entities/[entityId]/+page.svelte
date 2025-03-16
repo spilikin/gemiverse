@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { getEnvLabel } from '$lib';
 	import type { PageData } from './$types';    
-  import RawDataView from '../../RawDataView.svelte';
+  import RawDataView from '../../../../RawDataView.svelte';
   import { goto } from '$app/navigation';
 
 	export let data: PageData;

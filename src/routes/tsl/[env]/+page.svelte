@@ -1,20 +1,23 @@
 <script lang="ts">
 	import { getEnvLabel } from '$lib';
-	import type { PageData } from './$types';
 	import {beforeNavigate, afterNavigate} from '$app/navigation';
+	import RawDataView from '../../RawDataView.svelte';
+	import SchemeInformationView from './SchemeInformationView.svelte';
+	import ServiceProvidersView from './ServiceProvidersView.svelte';
+
+	import type { PageData } from './$types';    
 	export let data: PageData;
+
+
 	export let loading = true;
 	import {
 		Breadcrumb,
 		BreadcrumbItem,
 		Tabs,
 		Tab,
-		TabContent
+		TabContent,
     } from "carbon-components-svelte";
 
-	import RawDataView from '../../RawDataView.svelte';
-	import EntityListView from './EntityListView.svelte';
-	import MasterView from './MasterView.svelte';
   	import { onMount } from 'svelte';
   	import { goto } from '$app/navigation';
 
@@ -43,24 +46,27 @@
 </script>
 
 <Breadcrumb>
-	<BreadcrumbItem href="/federations">Föderationen</BreadcrumbItem>
+	<BreadcrumbItem href="/tsl">Trusted Lists</BreadcrumbItem>
 	<BreadcrumbItem isCurrentPage={true}>{getEnvLabel(data.env)}</BreadcrumbItem>
 </Breadcrumb>
 
-<h2>{getEnvLabel(data.env)}-Föderation</h2>
-<h4>{data.fed.master.iss}</h4>
+<h2>{getEnvLabel(data.env)}-TSL</h2>
+<h4>
+	{data.tsl.schemeInformation.tslSequenceNumber} | 
+	{new Date(data.tsl.schemeInformation.lastIssueDateTime).toISOString().split('T')[0]}
+</h4>
 <Tabs class="tabs">
-	<Tab label="Alle" href="#all" on:click={tabClick}/>
-	<Tab label="Identity Provider" href="#idp" on:click={tabClick}/>
-	<Tab label="Dienste" href="#rp" on:click={tabClick}/>
-	<Tab label="Master" href="#master" on:click={tabClick}/>
+	<Tab label="Service Providers" href="#sp" on:click={tabClick}/>
+	<Tab label="Scheme" href="#scheme" on:click={tabClick}/>
 	<Tab label="Rohdaten" href="#raw" on:click={tabClick}/>
 	<svelte:fragment slot="content">
-	  <TabContent><EntityListView env={data.env} entities={data.allEntities} /></TabContent>
-	  <TabContent><EntityListView env={data.env} entities={data.opEntities} /></TabContent>
-	  <TabContent><EntityListView env={data.env} entities={data.rpEntities} /></TabContent>
-	  <TabContent><MasterView fed={data.fed}/></TabContent>
-	  <TabContent><RawDataView content={data.fed}/></TabContent>
+		<TabContent>
+			<ServiceProvidersView tsl={data.tsl}/>
+		</TabContent>
+		<TabContent>
+			<SchemeInformationView tsl={data.tsl}/>
+		</TabContent>
+		<TabContent><RawDataView content={data.tsl}/></TabContent>
 	</svelte:fragment>
 </Tabs>
 

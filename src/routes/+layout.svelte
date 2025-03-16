@@ -35,12 +35,17 @@
   
   <SideNav isOpen={isSideNavOpen}>
     <SideNavItems>
-        <SideNavMenu text="Federation" expanded={true}>
+        <SideNavMenu text="Federations" expanded={true}>
             <SideNavMenuItem href="/federations/test">Test</SideNavMenuItem>
             <SideNavMenuItem href="/federations/ref">Referenz</SideNavMenuItem>
             <SideNavMenuItem href="/federations/prod">Produktiv</SideNavMenuItem>
         </SideNavMenu>
-       
+        <SideNavMenu text="Trusted Lists" expanded={true}>
+          <SideNavMenuItem href="/tsl/test">Test</SideNavMenuItem>
+          <SideNavMenuItem href="/tsl/ref">Referenz</SideNavMenuItem>
+          <SideNavMenuItem href="/tsl/prod">Produktiv</SideNavMenuItem>
+      </SideNavMenu>
+     
     </SideNavItems>
   </SideNav>
 

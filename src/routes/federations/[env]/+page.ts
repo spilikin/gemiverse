@@ -6,7 +6,6 @@ function sortEntities(a: Entity, b: Entity) {
 }
 
 export const load: PageLoad = ({ fetch, params }) => {
-
     return fetch(`/api/federations/${params.env}`).then(res => res.json()).then((fed: Federation) => {
         return {
             fed: fed,

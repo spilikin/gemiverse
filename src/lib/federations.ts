@@ -1,5 +1,5 @@
 import * as jose from 'jose'
-
+import { type CertificateInfo } from './x509'
 export function encodeEntityIdentifier(statement: EntityStatement) {
     // remove https://, replace slashes with $
     return statement.iss.replace(/https:\/\//, '').replaceAll(/\//g, '$')
@@ -126,16 +126,6 @@ export interface EntityStatement {
 export interface Federation {
     master: EntityStatement,
     entities: Entity[]
-}
-
-export interface CertificateInfo {
-    subject: string
-    issuer: string
-    serialNumber: string
-    keyType?: string
-    keyAlg?: string
-    notBefore: Date
-    notAfter: Date
 }
 
 export function parseDistinguishedName(dn: string): Map<string, string[]> {

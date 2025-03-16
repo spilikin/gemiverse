@@ -1,11 +1,12 @@
 import Atlas from './atlas'
 import * as jose from 'jose'
-import { encodeEntityIdentifier, EntityType, type Entity, type EntityStatement, type Federation, type CertificateInfo, type AndroidAppAsset, type AppleAppLink, type AndroidApp } from './federations'
+import { encodeEntityIdentifier, EntityType, type Entity, type EntityStatement, type Federation, type AndroidAppAsset, type AppleAppLink, type AndroidApp } from './federations'
 import { httpInitForURL } from './api_key.server'
 import { loadObjectFromCache } from '$lib/cache.server'
 import crypto from "crypto"
 import axios from 'axios';
 import { crc32 } from 'zlib'
+import { toCertificateInfo, type CertificateInfo } from './x509'
 
 
 const CONTROLLER_URL = process.env.CONTROLLER_URL || 'http://localhost:3001'
@@ -164,24 +165,6 @@ async function getHostCertificates(hostname: string): Promise<crypto.X509Certifi
       certs[i] = `-----BEGIN CERTIFICATE-----\n${cert}`
     })
     return certs.map(cert => new crypto.X509Certificate(cert))
-}
-
-function toCertificateInfo(x509: crypto.X509Certificate): CertificateInfo {
-    var keyAlg
-    if (x509.publicKey.asymmetricKeyType == 'ec') {
-      keyAlg = x509.publicKey.asymmetricKeyDetails?.namedCurve
-    } else {
-      keyAlg = "RSA-"+x509.publicKey.asymmetricKeyDetails?.modulusLength
-    }
-    return {
-        subject: x509.subject,
-        issuer: x509.issuer,
-        serialNumber: x509.serialNumber,
-        keyType: x509.publicKey.asymmetricKeyType?.toUpperCase(),
-        keyAlg: keyAlg,
-        notBefore: new Date(x509.validFrom),
-        notAfter: new Date(x509.validTo),
-    }
 }
 
 function fetchEntityStatement(iss: string) {
