@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { type ITrustServiceStatusList, getMultilangText, getTSPScope } from "$lib/tsl";
+    import { type ITrustServiceStatusList, getMultilangText, getTSPScope } from "$lib/tsl/tsl";
     import { getScopeLabel, getScopeColor } from "../tslutil";
     import {
         StructuredList, 

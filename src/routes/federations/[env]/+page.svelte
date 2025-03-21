@@ -9,8 +9,11 @@
 		BreadcrumbItem,
 		Tabs,
 		Tab,
-		TabContent
+		TabContent,
+		Button,
     } from "carbon-components-svelte";
+
+	import Download from "carbon-icons-svelte/lib/Download.svelte";
 
 	import RawDataView from '../../RawDataView.svelte';
 	import EntityListView from './EntityListView.svelte';
@@ -42,11 +45,26 @@
 
 </script>
 
+<style>
+	.buttons-bar {
+		float: right;
+	}
+</style>
+
 <Breadcrumb>
 	<BreadcrumbItem href="/federations">Föderationen</BreadcrumbItem>
 	<BreadcrumbItem isCurrentPage={true}>{getEnvLabel(data.env)}</BreadcrumbItem>
 </Breadcrumb>
 
+<div class="buttons-bar">
+	<Button 
+	kind="tertiary"
+	iconDescription="Export"
+	icon={Download}
+	size="small"
+	href={`/api/federations/${data.env}/export`}
+	>Export</Button>
+</div>
 <h2>{getEnvLabel(data.env)}-Föderation</h2>
 <h4>{data.fed.master.iss}</h4>
 <Tabs class="tabs">

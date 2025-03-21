@@ -1,5 +1,5 @@
-import { decodeEntityIdentifier } from '$lib/federations';
-import { getEntity } from '$lib/federations.server';
+import { decodeEntityIdentifier } from '$lib/federations/federations';
+import { getEntity } from '$lib/federations/federations.server';
 import { json } from '@sveltejs/kit';
 
 export async function GET(event) {

@@ -1,4 +1,4 @@
-<script type="ts">
+<script lang="ts">
     import "carbon-components-svelte/css/white.css";
     import {AppVersion, BuildDate} from "$lib/version";
     import {

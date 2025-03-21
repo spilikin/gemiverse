@@ -1,4 +1,4 @@
-import { prefetchFederationCache } from '$lib/federations.server';
+import { prefetchFederationCache } from '$lib/federations/federations.server';
 import { json } from '@sveltejs/kit';
 
 export async function POST(event) {

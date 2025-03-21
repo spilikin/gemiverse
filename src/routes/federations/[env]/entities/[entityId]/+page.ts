@@ -1,5 +1,5 @@
 import type { PageLoad } from './$types';
-import type { Entity } from '$lib/federations';
+import type { Entity } from '$lib/federations/federations';
 
 export const load: PageLoad = ({ fetch, params }) => {
 

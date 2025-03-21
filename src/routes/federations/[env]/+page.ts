@@ -1,5 +1,5 @@
 import type { PageLoad } from './$types';
-import type { Entity, Federation } from '$lib/federations';
+import type { Entity, Federation } from '$lib/federations/federations';
 
 function sortEntities(a: Entity, b: Entity) {
     return (a.statement?.metadata.federation_entity?.name ?? "").localeCompare(b.statement?.metadata.openid_relying_party?.client_name ?? "");

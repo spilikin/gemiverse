@@ -1,5 +1,5 @@
 <script lang="ts">	
-    import { type Entity, encodeEntityIdentifier } from '$lib/federations';
+    import { type Entity, encodeEntityIdentifier } from '$lib/federations/federations';
     import { goto } from '$app/navigation';
     export let env = '';
     export let entities: Entity[] = [];

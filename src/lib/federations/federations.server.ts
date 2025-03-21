@@ -1,12 +1,13 @@
-import Atlas from './atlas'
+import Atlas from '../atlas'
 import * as jose from 'jose'
 import { encodeEntityIdentifier, EntityType, type Entity, type EntityStatement, type Federation, type AndroidAppAsset, type AppleAppLink, type AndroidApp } from './federations'
-import { httpInitForURL } from './api_key.server'
+import { httpInitForURL } from '../api_key.server'
 import { loadObjectFromCache } from '$lib/cache.server'
 import crypto from "crypto"
-import axios from 'axios';
+import axios from 'axios'
 import { crc32 } from 'zlib'
-import { toCertificateInfo, type CertificateInfo } from './x509'
+import { toCertificateInfo, type CertificateInfo } from '../x509'
+import xlsx from 'node-xlsx' 
 
 
 const CONTROLLER_URL = process.env.CONTROLLER_URL || 'http://localhost:3001'
@@ -278,4 +279,87 @@ export async function prefetchFederationCache() {
 
 function calculateCidi(statement: EntityStatement): string {
   return crc32(statement.iss).toString()
+}
+
+function generateXLSX(federation: Federation) {
+  const options_entities = {'!cols': [{wch: 16}, {wch: 16}, {wch: 50}, {wch: 50}, {wch: 50}, {wch: 50}]};
+  let headers_entities = [
+    ['type', 'cidi', 'iss', 'federation_entity_name', 'organization_name', 'error'],
+  ]
+  let data_entities = federation.entities.map(entity => {
+    return [
+      entity.type || '',
+      entity.cidi || '',
+      entity.iss || '',
+      entity.statement?.metadata.federation_entity?.name || '',
+      entity.statement?.metadata.openid_relying_party?.organization_name || entity.statement?.metadata.openid_provider?.organization_name || '',
+      entity.error?.error_description || ''
+    ]
+  })
+  .sort((a, b) => a[2].localeCompare(b[2]))
+  .sort((a, b) => a[0].localeCompare(b[0]))
+
+  const options_openid_providers = {'!cols': [{wch: 16}, {wch: 16}, {wch: 50}, {wch: 50}, {wch: 50}, {wch: 70}, {wch: 70}, {wch: 50}]};
+  let headers_openid_providers = [
+    ['type', 'cidi', 'iss', 'federation_entity_name', 'organization_name', 'scopes_supported', 'claims_supported', 'error'],
+  ]
+  let data_openid_providers = federation.entities.filter(entity => entity.type == EntityType.OpenidProvider).map(entity => {
+    return [
+      entity.type || '',
+      entity.cidi || '',
+      entity.iss || '',
+      entity.statement?.metadata.federation_entity?.name || '',
+      entity.statement?.metadata.openid_provider?.organization_name || '',
+      entity.statement?.metadata.openid_provider?.scopes_supported?.sort().join(' ') || '',
+      entity.statement?.metadata.openid_provider?.claims_supported?.sort().join(' ') || '',
+      entity.error?.error_description || ''
+    ]
+  }).sort((a, b) => a[2].localeCompare(b[2]))
+
+  // Relaying parties
+  const options_relying_parties = {'!cols': [{wch: 16}, {wch: 16}, {wch: 50}, {wch: 50}, {wch: 50}, {wch: 70}, {wch: 50}]};
+
+  let headers_relying_parties = [
+    ['type', 'cidi', 'iss', 'federation_entity_name', 'organization_name', 'scope', 'error'],
+  ]
+
+  let data_relying_parties = federation.entities.filter(entity => entity.type == EntityType.OpenidRelyingParty).map(entity => {
+    return [
+      entity.type || '',
+      entity.cidi || '',
+      entity.iss || '',
+      entity.statement?.metadata.federation_entity?.name || '',
+      entity.statement?.metadata.openid_relying_party?.organization_name || '',
+      entity.statement?.metadata.openid_relying_party?.scope || '',
+      entity.error?.error_description || ''
+    ]
+  }
+  ).sort((a, b) => a[2].localeCompare(b[2]))
+
+
+
+  var buffer = xlsx.build([
+    {name: 'Entities', data: headers_entities.concat(data_entities), options: options_entities},
+    {name: 'OpenIDProviders', data: headers_openid_providers.concat(data_openid_providers), options: options_openid_providers},
+    {name: 'RelyingParties', data: headers_relying_parties.concat(data_relying_parties), options: options_relying_parties},
+  ]); // Returns a buffer
+  return buffer
+}
+
+export async function getFederationExportXLSX(env: string, forceFetch = false, exp = 60): Promise<Buffer | null> {
+  const key = `federations:${env}:xlsx`
+
+  let str = await loadObjectFromCache<string>(key, forceFetch, async () => {
+    let fed = await getFederation(env)
+    if (!fed) {
+      throw new Error('Federation not found')
+    }
+    return generateXLSX(fed).toString('base64')
+  })
+
+  if (!str) {
+    return null
+  }
+
+  return Buffer.from(str, 'base64')
 }

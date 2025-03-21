@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { IPostalAddress } from "$lib/tsl";
+    import type { IPostalAddress } from "$lib/tsl/tsl";
     export let postal: IPostalAddress;
 </script>
 <div class="postal">

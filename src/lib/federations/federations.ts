@@ -1,5 +1,5 @@
 import * as jose from 'jose'
-import { type CertificateInfo } from './x509'
+import { type CertificateInfo } from '../x509'
 export function encodeEntityIdentifier(statement: EntityStatement) {
     // remove https://, replace slashes with $
     return statement.iss.replace(/https:\/\//, '').replaceAll(/\//g, '$')
@@ -28,6 +28,7 @@ export interface OpenidProvider {
     //request_authentication_methods_supported: [Object],
     organization_name: string
     scopes_supported: string[]
+    claims_supported: string[]
     issuer: string
     id_token_encryption_enc_values_supported: string[]
     authorization_endpoint: string

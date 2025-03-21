@@ -1,5 +1,5 @@
 import type { PageLoad } from './$types';
-import type { ITrustServiceStatusList } from '$lib/tsl';
+import type { ITrustServiceStatusList } from '$lib/tsl/tsl';
 
 export const load: PageLoad = ({ fetch, params }) => {
 

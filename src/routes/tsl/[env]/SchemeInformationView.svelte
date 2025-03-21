@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { getMultilangText, getPrimaryLocation, getBackupLocation } from '$lib/tsl';
+	import { getMultilangText, getPrimaryLocation, getBackupLocation } from '$lib/tsl/tsl';
     import AddressView from './AddressView.svelte';
-	import type { ITrustServiceStatusList } from "$lib/tsl";
+	import type { ITrustServiceStatusList } from "$lib/tsl/tsl";
     import {
         StructuredList,
         StructuredListBody,
