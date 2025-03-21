@@ -1,6 +1,5 @@
 <script lang="ts">
-    import type { HostInfo } from "$lib/federations";
-    import { parseDistinguishedName } from "$lib/federations";
+    import { type HostInfo, parseDistinguishedName} from "$lib/federations/federations";
 
     import {
         StructuredList,
