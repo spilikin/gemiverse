@@ -25,9 +25,9 @@ dockerpush: dockerbuild
 
 # Deploy app to VM
 deploy: 
+	ssh gemiverse.spilikin.dev docker-compose down --remove-orphans
 	scp docker-compose-deployment.yaml gemiverse.spilikin.dev:docker-compose.yaml
 	scp -r ./controller gemiverse.spilikin.dev:.
 	ssh gemiverse.spilikin.dev docker-compose pull
 	ssh gemiverse.spilikin.dev docker-compose build
-	ssh gemiverse.spilikin.dev docker-compose down --remove-orphans
 	ssh gemiverse.spilikin.dev docker-compose up -d
