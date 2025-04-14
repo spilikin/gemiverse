@@ -1,5 +1,5 @@
 set export := true
-VERSION := "2.3.2"
+VERSION := "2.3.5"
 DOCKER_IMAGE := "spilikin/gemiverse"
 
 # Display available commands

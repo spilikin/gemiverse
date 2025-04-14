@@ -8,6 +8,7 @@ import axios from 'axios'
 import { crc32 } from 'zlib'
 import { toCertificateInfo, type CertificateInfo } from '../x509'
 import xlsx from 'node-xlsx' 
+import { time } from 'console'
 
 
 const CONTROLLER_URL = process.env.CONTROLLER_URL || 'http://localhost:3001'
@@ -40,42 +41,66 @@ async function fetchFederation(env: string): Promise<Federation | null> {
 
     const list = await fetchFederationList(statement.metadata.federation_entity!.federation_list_endpoint!)
 
-    var promises = list.map((entityIss) => {
-        return fetchEntityBase(entityIss)
-        .then(entity => entity)
-        .catch(err => {
-            if (err instanceof TypeError) {
-              err = err.cause as any
+    // group the entities by their FQDN
+    const fqdnMap = new Map<string, string[]>()
+    for (const entityIss of list) {
+        const fqdn = new URL(entityIss).hostname
+        if (!fqdnMap.has(fqdn)) {
+            fqdnMap.set(fqdn, [])
+        }
+        fqdnMap.get(fqdn)!.push(entityIss)
+    }
+    
+    var promisesByFqdn = Array.from(fqdnMap.values()).map(async (issList) => {
+        return serial(issList.map((iss) => {
+            return async () => {
+                console.log('fetching entity', iss)
+                await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * (700 - 100 + 1)) + 100))
+                return fetchEntityBase(iss)
             }
-              
-            console.error('error fetching entity', entityIss, err.code, err.message)
-            return {
-              iss: entityIss,
-              error: {
-                  error: err.code,
-                  error_description: err.message
-              }
-          } as Entity
-        })
+        }))
     })
-    const entities = await Promise.all(promises)
+
+    const resolvedPromises = await Promise.all(promisesByFqdn)
+    
+    const flattenPromises = resolvedPromises.reduce((acc, val) => acc.concat(val), [])
+
+    const entities = await Promise.all(flattenPromises)
+
     return {
         master: statement,
         entities: entities
     }
 }
+
 async function fetchEntityBase(iss: string): Promise<Entity> {
-  const resp = await fetchEntityStatement(iss)
-  const statement = resp.statement as unknown as EntityStatement
- 
-  return {
-    id: encodeEntityIdentifier(statement),
-    cidi: calculateCidi(statement),
-    type: statement.metadata.openid_provider ? EntityType.OpenidProvider : EntityType.OpenidRelyingParty,
-    iss: iss,
-    statementProtectedHeaders: resp.protectedHeaders,
-    statement: statement,
+  try {
+    const resp = await fetchEntityStatement(iss)
+    const statement = resp.statement as unknown as EntityStatement
+  
+    return {
+      id: encodeEntityIdentifier(statement),
+      cidi: calculateCidi(statement),
+      type: statement.metadata.openid_provider ? EntityType.OpenidProvider : EntityType.OpenidRelyingParty,
+      iss: iss,
+      statementProtectedHeaders: resp.protectedHeaders,
+      statement: statement,
+    }
+  } catch (err) {
+    var anyError = err as any
+    if (anyError instanceof TypeError) {
+      anyError = anyError.cause as any
+    }
+
+    return {
+      iss: iss,
+      error: {
+          error: anyError.code,
+          error_description: anyError.message
+      }
+    } as Entity
   }
+
 }
 
 async function fetchEntity(iss: string) {
@@ -86,7 +111,8 @@ async function fetchEntity(iss: string) {
         const m = entity.statement.metadata.openid_provider
         jwks = m.jwks
         if (m.signed_jwks_uri) {
-            jwks = await fetch(m.signed_jwks_uri)
+            const init = httpInitForURL(m.signed_jwks_uri)
+            jwks = await fetch(m.signed_jwks_uri, init)
                 .then(res => res.text())
                 .then(token => jose.decodeJwt(token))
         }
@@ -378,3 +404,8 @@ export async function getFederationExportXLSX(env: string, forceFetch = false, e
 
   return Buffer.from(str, 'base64')
 }
+
+// see https://stackoverflow.com/questions/24586110/resolve-promises-one-after-another-i-e-in-sequence
+const serial = <T>(funcs: Array<() => Promise<T>>): Promise<T[]> =>
+  funcs.reduce((promise, func) =>
+      promise.then(result => func().then(res => [...result, res])), Promise.resolve([] as T[]));
