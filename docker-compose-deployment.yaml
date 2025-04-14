@@ -24,6 +24,8 @@ services:
   cache:
     image: valkey/valkey
     restart: always
+    volumes:
+      - ./valkey_data:/data
 
   app:
     image: spilikin/gemiverse

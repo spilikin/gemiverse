@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { page } from '$app/state';  
     import "carbon-components-svelte/css/white.css";
     import {AppVersion, BuildDate} from "$lib/version";
     import {
@@ -14,8 +15,13 @@
       SideNavMenu,
       SideNavMenuItem,
     } from "carbon-components-svelte";
-    let isOpen = false;
-    let isSideNavOpen = true;
+    let isOpen = false
+    let isSideNavOpen = true
+
+
+    function isSelected(path: string): boolean {
+      return page.url.pathname.startsWith(path);
+    }
   </script>
   
   <velte:head>
@@ -36,16 +42,15 @@
   <SideNav isOpen={isSideNavOpen}>
     <SideNavItems>
         <SideNavMenu text="Federations" expanded={true}>
-            <SideNavMenuItem href="/federations/test">Test</SideNavMenuItem>
-            <SideNavMenuItem href="/federations/ref">Referenz</SideNavMenuItem>
-            <SideNavMenuItem href="/federations/prod">Produktiv</SideNavMenuItem>
+            <SideNavMenuItem href="/federations/test" isSelected={isSelected("/federations/test")}>Test</SideNavMenuItem>
+            <SideNavMenuItem href="/federations/ref" isSelected={isSelected("/federations/ref")}>Referenz</SideNavMenuItem>
+            <SideNavMenuItem href="/federations/prod" isSelected={isSelected("/federations/prod")}>Produktiv</SideNavMenuItem>
         </SideNavMenu>
         <SideNavMenu text="Trusted Lists" expanded={true}>
-          <SideNavMenuItem href="/tsl/test">Test</SideNavMenuItem>
-          <SideNavMenuItem href="/tsl/ref">Referenz</SideNavMenuItem>
-          <SideNavMenuItem href="/tsl/prod">Produktiv</SideNavMenuItem>
+            <SideNavMenuItem href="/tsl/test" isSelected={isSelected("/tsl/test")}>Test</SideNavMenuItem>
+            <SideNavMenuItem href="/tsl/ref" isSelected={isSelected("/tsl/ref")}>Referenz</SideNavMenuItem>
+            <SideNavMenuItem href="/tsl/prod" isSelected={isSelected("/tsl/prod")}>Produktiv</SideNavMenuItem>
       </SideNavMenu>
-     
     </SideNavItems>
   </SideNav>
 

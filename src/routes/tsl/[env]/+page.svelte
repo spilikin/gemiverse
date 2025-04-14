@@ -53,7 +53,7 @@
 <h2>{getEnvLabel(data.env)}-TSL</h2>
 <h4>
 	{data.tsl.schemeInformation.tslSequenceNumber} | 
-	{new Date(data.tsl.schemeInformation.lastIssueDateTime).toISOString().split('T')[0]}
+	{data.tsl.schemeInformation.listIssueDateTime.split('T')[0]}
 </h4>
 <Tabs class="tabs">
 	<Tab label="Service Providers" href="#sp" on:click={tabClick}/>

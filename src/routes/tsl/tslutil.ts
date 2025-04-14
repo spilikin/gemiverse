@@ -19,7 +19,7 @@ export function getScopeLabel(scope: string): string {
     }
 }
 
-export function getScopeColor(scope: string): "black" | "green" | "blue" | "magenta" | "outline" | "red" | undefined {
+export function getScopeColor(scope: string): "gray" | "green" | "blue" | "magenta" | "outline" | "red" | undefined {
     switch (scope) {
         case "hba":
             return "blue";
@@ -28,7 +28,7 @@ export function getScopeColor(scope: string): "black" | "green" | "blue" | "mag
         case "egk":
             return "magenta";
         case "bnetza":
-            return "black";
+            return "gray";
         default:
             return "outline";
     }

@@ -50,7 +50,7 @@
             {tsl.schemeInformation.tslSequenceNumber}
         </StructuredListField>
         <StructuredListField label="Issue Date Time">
-            {formatDateTime(tsl.schemeInformation.lastIssueDateTime)}
+            {formatDateTime(tsl.schemeInformation.listIssueDateTime)}
         </StructuredListField>
         {#if tsl.schemeInformation.nextUpdate}
         <StructuredListField label="Next Update">

@@ -31,7 +31,7 @@ export interface ISchemeInformation {
     statusDeterminationApproach: string;
     policyOrLegalNotice?: IPolicyOrLegalNotice;
     otherTSLPointer?: IOtherTSLPointer[];
-    lastIssueDateTime: string;
+    listIssueDateTime: string;
     nextUpdate?: string[];
 }
 
@@ -52,6 +52,7 @@ export interface IServiceDigitalIdentity {
 export interface IDigitalIdentity {
     x509Certificate: string | null;
     certificateInfo: ICertificateInfo | null;
+    x509SubjectKeyIdentifier: string | null;
 }
 
 export interface ITrustServiceProvider {

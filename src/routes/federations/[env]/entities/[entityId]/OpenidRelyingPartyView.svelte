@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { CertificateInfo } from "$lib/x509";
-    import type { Entity, OpenidRelyingParty } from "$lib/federations";
+    import type { Entity, OpenidRelyingParty } from "$lib/federations/federations";
 
     import {
         StructuredList,
@@ -117,5 +117,11 @@
               <CodeSnippet type="multi" light={true} expanded>{JSON.stringify(entity.statement?.jwks?.keys[0], null, 2)}</CodeSnippet>
           </StructuredListCell>
         </StructuredListRow>
-    </StructuredListBody>
+        <StructuredListRow>
+            <StructuredListCell head>Entity protected headers</StructuredListCell>
+            <StructuredListCell>
+                <CodeSnippet type="multi" light={true} expanded>{JSON.stringify(entity.statementProtectedHeaders, null, 2)}</CodeSnippet>
+            </StructuredListCell>
+          </StructuredListRow>
+      </StructuredListBody>
 </StructuredList>

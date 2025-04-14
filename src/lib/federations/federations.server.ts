@@ -25,7 +25,7 @@ export async function getEntity(env: string, iss: string, forceFetch: boolean = 
 
     return await loadObjectFromCache<Entity>(key, forceFetch, async () => {
         return await fetchEntity(iss)
-    })
+    }, 60)
 }
 
 async function fetchFederation(env: string): Promise<Federation | null> {
@@ -40,18 +40,22 @@ async function fetchFederation(env: string): Promise<Federation | null> {
 
     const list = await fetchFederationList(statement.metadata.federation_entity!.federation_list_endpoint!)
 
-    var promises = list.map((entity) => {
-        return fetchEntityBase(entity)
+    var promises = list.map((entityIss) => {
+        return fetchEntityBase(entityIss)
         .then(entity => entity)
         .catch(err => {
-            console.error(entity, err.message)
+            if (err instanceof TypeError) {
+              err = err.cause as any
+            }
+              
+            console.error('error fetching entity', entityIss, err.code, err.message)
             return {
-                iss: entity,
-                error: {
-                    error: typeof err,
-                    error_description: err.message
-                }
-            } as Entity
+              iss: entityIss,
+              error: {
+                  error: err.code,
+                  error_description: err.message
+              }
+          } as Entity
         })
     })
     const entities = await Promise.all(promises)
@@ -61,12 +65,15 @@ async function fetchFederation(env: string): Promise<Federation | null> {
     }
 }
 async function fetchEntityBase(iss: string): Promise<Entity> {
-  const statement = await fetchEntityStatement(iss)
+  const resp = await fetchEntityStatement(iss)
+  const statement = resp.statement as unknown as EntityStatement
+ 
   return {
     id: encodeEntityIdentifier(statement),
     cidi: calculateCidi(statement),
     type: statement.metadata.openid_provider ? EntityType.OpenidProvider : EntityType.OpenidRelyingParty,
     iss: iss,
+    statementProtectedHeaders: resp.protectedHeaders,
     statement: statement,
   }
 }
@@ -168,7 +175,12 @@ async function getHostCertificates(hostname: string): Promise<crypto.X509Certifi
     return certs.map(cert => new crypto.X509Certificate(cert))
 }
 
-function fetchEntityStatement(iss: string) {
+interface EntityStatementResponse {
+  protectedHeaders: jose.ProtectedHeaderParameters
+  statement: jose.JWTPayload
+}
+
+function fetchEntityStatement(iss: string): Promise<EntityStatementResponse> {
     const init = httpInitForURL(iss)
     const wellknownURL = `${iss}/.well-known/openid-federation`
     return fetch(wellknownURL, init)
@@ -179,10 +191,13 @@ function fetchEntityStatement(iss: string) {
           return res.text()
         })
         .then(token => {
-            return jose.decodeJwt(token)
+            return {
+                protectedHeaders: jose.decodeProtectedHeader(token),
+                statement: jose.decodeJwt(token)
+            }
         })
-        .then(jwt => {
-            return jwt as unknown as EntityStatement
+        .catch(err => {
+            throw err
         })
         
 

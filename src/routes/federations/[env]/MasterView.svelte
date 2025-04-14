@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Federation } from "$lib/federations";
+	import type { Federation } from "$lib/federations/federations";
     export let fed: Federation
     import {
         StructuredList,

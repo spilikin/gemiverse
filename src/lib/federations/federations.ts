@@ -108,6 +108,7 @@ export interface Entity {
     type: EntityType
     iss: string
     error?: Error
+    statementProtectedHeaders: jose.JWSHeaderParameters
     statement?: EntityStatement
     androidLinks?: AndroidAppAsset[]
     appleLinks?: AppleAppLink[]

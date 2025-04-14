@@ -8,20 +8,43 @@ export type { MultiLangString, MultiLangURI }
 
 export const NS_ETSI_02231_V2 = 'http://uri.etsi.org/02231/v2#';
 
-export async function getTSL(env: string, forceFetch: boolean = false): Promise<ITrustServiceStatusList | null> {
+export async function getTsl(env: string, forceFetch: boolean = false): Promise<ITrustServiceStatusList | null> {
     const key = `tsl:${env}`
 
     return await loadObjectFromCache<ITrustServiceStatusList>(key, forceFetch, async () => {
-        return await fetchTSL(env)
+        return await fetchTsl(env)
     }, 30 * 60)
 }
 
-export async function fetchTSL(env: string): Promise<ITrustServiceStatusList | null> {
+export async function fetchTsl(env: string): Promise<ITrustServiceStatusList | null> {
     if (!Atlas.tsl[env as keyof typeof Atlas.tsl]) {
         return null
     }
 
     const url = Atlas.tsl[env as keyof typeof Atlas.tsl].url;
+    return fetch(url).then((response) => response.text()).then((xml) => {
+        return parseTrustServiceStatusList(xml);
+    })
+}
+
+export async function getTslQes(env: string, forceFetch: boolean = true): Promise<ITrustServiceStatusList | null> {
+    const key = `tsl:${env}:qes`
+    return await loadObjectFromCache<ITrustServiceStatusList>(key, forceFetch, async () => {
+        return await fetchTslQes(env)
+    }, 30 * 60)
+}
+
+export async function fetchTslQes(env: string): Promise<ITrustServiceStatusList | null> {
+    if (!Atlas.tsl[env as keyof typeof Atlas.tsl]) {
+        return null
+    }
+
+    const url = Atlas.tsl[env as keyof typeof Atlas.tsl].qesUrl;
+
+    if (!url) {
+        return null
+    }
+
     return fetch(url).then((response) => response.text()).then((xml) => {
         return parseTrustServiceStatusList(xml);
     })
@@ -48,17 +71,17 @@ class SchemeInformation {
     statusDeterminationApproach: string;
     policyOrLegalNotice: PolicyOrLegalNotice | undefined;
     otherTSLPointer: OtherTSLPointer[] | undefined;
-    lastIssueDateTime: string;
+    listIssueDateTime: string;
     nextUpdate: string[] | undefined;
   
     constructor(el: Element) {
         this.tslVersionIdentifier = el.querySelector('TSLVersionIdentifier')?.textContent || '';
         this.tslSequenceNumber = el.querySelector('TSLSequenceNumber')?.textContent || '';
         this.tslType = el.querySelector('TSLType')?.textContent || '';
-        this.schemeOperatorName = Array.from(el.querySelectorAll('SchemeOperatorName')).map(toMultiLangString);
+        this.schemeOperatorName = Array.from(el.querySelector('SchemeOperatorName')?.querySelectorAll("Name") || []).map(toMultiLangString);
         this.schemeOperatorAddress = new Address(el.querySelector('SchemeOperatorAddress')!);
         this.schemeName = Array.from(el.querySelectorAll('SchemeName')).map(toMultiLangString);
-        this.schemeInformationURI = Array.from(el.querySelectorAll('SchemeInformationURI')).map(toMultiLangString);
+        this.schemeInformationURI = Array.from(el.querySelector('SchemeInformationURI')?.querySelectorAll("URI") || []).map(toMultiLangString);
         this.statusDeterminationApproach = el.querySelector('StatusDeterminationApproach')?.textContent || '';
         if (el.querySelector('PolicyOrLegalNotice')) {
             this.policyOrLegalNotice = new PolicyOrLegalNotice(el.querySelector('PolicyOrLegalNotice')!);
@@ -66,11 +89,24 @@ class SchemeInformation {
         if (el.querySelector('PointersToOtherTSL')) {
             this.otherTSLPointer = Array.from(el.querySelectorAll('OtherTSLPointer')).map((el) => new OtherTSLPointer(el));
         }
-        this.lastIssueDateTime = new Date(el.querySelector('ListIssueDateTime')?.textContent || '').toISOString();
+        this.listIssueDateTime = toDateISOString(el.querySelector('ListIssueDateTime')) || '';
         if (el.querySelectorAll('NextUpdate').length > 0) {
-            this.nextUpdate = Array.from(el.querySelectorAll('NextUpdate')).map((el) => new Date(el.textContent || '').toISOString());
+            this.nextUpdate = Array.from(el.querySelectorAll('NextUpdate')).map(toDateISOString);
         }
     }
+}
+
+function toDateISOString(el: Element | null): string {
+    if (!el || !el.textContent) {
+        return "";
+    }
+    var dateText = el.textContent;
+    dateText = dateText.trim();
+    const date = new Date(dateText);
+    if (isNaN(date.getTime())) {
+        return "";
+    }
+    return date.toISOString();
 }
 
 class OtherTSLPointer {
@@ -110,12 +146,16 @@ class ServiceDigitalIdentity {
 class DigitalIdentity {
     x509Certificate: string | null = null
     certificateInfo: CertificateInfo | null = null
+    x509SubjectKeyIdentifier: string | null = null
     constructor(el: Element) {
         if (el.querySelector('X509Certificate')) {
             const base64encoded = el.querySelector('X509Certificate')!!.textContent!!;
             const x509 = parseCertificateFromBase64(base64encoded);
             this.x509Certificate = encodeCertificateToPEM(x509);
             this.certificateInfo = toCertificateInfo(x509)
+        }
+        if (el.querySelector('X509SKI')) {
+            this.x509SubjectKeyIdentifier = el.querySelector('X509SKI')!!.textContent!!;
         }
     }
 }
@@ -137,12 +177,10 @@ class TSPInformation {
     tspInformationExtensions: Extension[] | undefined;
 
     constructor(el: Element) {
-        this.tspName = Array.from(el.querySelectorAll('TSPName')).map(toMultiLangString);
-        if (el.querySelectorAll('TSPTradeName').length > 0) {
-            this.tspTradeName = Array.from(el.querySelectorAll('TSPTradeName')).map(toMultiLangString);
-        }
+        this.tspName = Array.from(el.querySelector('TSPName')?.querySelectorAll("Name") || []).map(toMultiLangString);
+        this.tspTradeName = Array.from(el.querySelector('TSPTradeName')?.querySelectorAll("Name") || []).map(toMultiLangString);
         this.tspAddress = new Address(el.querySelector('TSPAddress')!);
-        this.tspInformationURI = Array.from(el.querySelectorAll('TSPInformationURI')).map(toMultiLangURI);
+        this.tspInformationURI = Array.from(el.querySelector('TSPInformationURI')?.querySelectorAll("URI") || []).map(toMultiLangURI);
         if (el.querySelectorAll('TSPInformationExtensions').length > 0) {
             this.tspInformationExtensions = Array.from(el.querySelectorAll('TSPInformationExtensions')).map((el) => new Extension(el));
         }
@@ -194,7 +232,7 @@ class ServiceInformation {
         this.serviceName = Array.from(el.querySelectorAll('ServiceName')).map(toMultiLangString);
         this.serviceDigitalIdentity = new ServiceDigitalIdentity(el.querySelector('ServiceDigitalIdentity')!);
         this.serviceStatus = el.querySelector('ServiceStatus')?.textContent || '';
-        this.statusStartingTime = new Date(el.querySelector('StatusStartingTime')!!.textContent!!).toISOString();
+        this.statusStartingTime = toDateISOString(el.querySelector('StatusStartingTime'));
         if (el.querySelectorAll('SchemeServiceDefinitionURI').length > 0) {
             this.schemeServiceDefinitionURI = Array.from(el.querySelectorAll('SchemeServiceDefinitionURI')).map(toMultiLangURI);
         }
@@ -235,11 +273,12 @@ class Address {
 
     constructor(el: Element) {
         this.postalAddresses = Array.from(el.querySelectorAll('PostalAddress')).map((el) => new PostalAddress(el));
-        this.electronicAddress = Array.from(el.querySelectorAll('ElectronicAddress')).map(toMultiLangURI);
+        this.electronicAddress = Array.from(el.querySelector('ElectronicAddress')?.querySelectorAll('URI') || []).map(toMultiLangURI);
     }
 }
   
 class PostalAddress {
+    lang: string;
     streetAddress: string;
     locality: string;
     stateOrProvince: string;
@@ -247,6 +286,7 @@ class PostalAddress {
     countryName: string;
 
     constructor(el: Element) {
+        this.lang = el.getAttribute('xml:lang')?.toLowerCase() || 'en';
         this.streetAddress = el.querySelector('StreetAddress')?.textContent || '';
         this.locality = el.querySelector('Locality')?.textContent || '';
         this.stateOrProvince = el.querySelector('StateOrProvince')?.textContent || '';
@@ -274,15 +314,19 @@ export function parseTrustServiceStatusList(xml: string): TrustServiceStatusList
 }
 
 function toMultiLangString(el: Element): MultiLangString {
+    var txt = el.textContent || '';
+    // trim new line and spaces beforre and after
+
+    txt = txt.trim();
     return {
-        lang: el.getAttribute('xml:lang') || 'DE',
-        string: el.textContent || ''
+        lang: el.getAttribute('xml:lang')?.toLowerCase() || 'de',
+        string: txt
     };
 }
 
 function toMultiLangURI(el: Element): MultiLangURI {
     return {
-        lang: el.getAttribute('xml:lang') || 'DE',
+        lang: el.getAttribute('xml:lang')?.toLocaleLowerCase() || 'de',
         uri: el.textContent || ''
     };
 }

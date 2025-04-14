@@ -12,13 +12,16 @@ export default {
     },
     tsl: {
         "test": {
-            url: "https://download-test.tsl.ti-dienste.de/ECC/ECC-RSA_TSL-test.xml"
+            url: "https://download-test.tsl.ti-dienste.de/ECC/ECC-RSA_TSL-test.xml",
+            qesUrl: null,
         },
         "ref": {
-            url: "https://download-ref.tsl.ti-dienste.de/ECC/ECC-RSA_TSL-ref.xml"
+            url: "https://download-ref.tsl.ti-dienste.de/ECC/ECC-RSA_TSL-ref.xml",
+            qesUrl: null,
         },
         "prod": {
-            url: "https://download.tsl.ti-dienste.de/ECC/ECC-RSA_TSL.xml"
+            url: "https://download.tsl.ti-dienste.de/ECC/ECC-RSA_TSL.xml",
+            qesUrl: "https://tl.bundesnetzagentur.de/TL-DE.XML"
         },
     },
 }
