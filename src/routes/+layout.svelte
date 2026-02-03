@@ -15,6 +15,9 @@
       SideNavMenu,
       SideNavMenuItem,
     } from "carbon-components-svelte";
+    
+    let { children } = $props();
+    
     let isOpen = $state(false)
     let isSideNavOpen = $state(true)
 
@@ -55,5 +58,5 @@
   </SideNav>
 
   <Content>
-  <slot></slot>
+  {@render children()}
   </Content>
