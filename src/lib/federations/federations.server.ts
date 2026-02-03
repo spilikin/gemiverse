@@ -15,7 +15,7 @@ import { loadObjectFromCache } from '$lib/cache.server';
 import crypto from 'crypto';
 import axios from 'axios';
 import { crc32 } from 'zlib';
-import { toCertificateInfo, type CertificateInfo } from '../x509';
+import { toCertificateInfo, type CertificateInfo } from '../x509.server';
 import xlsx from 'node-xlsx';
 
 const CONTROLLER_URL = process.env.CONTROLLER_URL || 'http://localhost:3001';

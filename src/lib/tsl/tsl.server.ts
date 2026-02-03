@@ -2,7 +2,7 @@ import { type ITrustServiceStatusList } from "./tsl"
 import { loadObjectFromCache } from "../cache.server"
 import { JSDOM } from 'jsdom'
 import Atlas from '../atlas'
-import { toCertificateInfo, type CertificateInfo, parseCertificateFromBase64, encodeCertificateToPEM } from '../x509'
+import { toCertificateInfo, type CertificateInfo, parseCertificateFromBase64, encodeCertificateToPEM } from '../x509.server'
 import type { MultiLangString, MultiLangURI } from './tsl'
 export type { MultiLangString, MultiLangURI }
 
