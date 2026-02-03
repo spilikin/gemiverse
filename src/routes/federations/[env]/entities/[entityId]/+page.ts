@@ -9,7 +9,9 @@ export const load: PageLoad = ({ fetch, params }) => {
 				throw error(404, 'Entity not found');
 			}
 			if (res.status != 200) {
-				throw error(res.status, 'Error fetching entity');
+				return res.json().then((body) => {
+					throw error(res.status, body.error || 'Error fetching entity');
+				});
 			}
 			return res.json();
 		})

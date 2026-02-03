@@ -11,6 +11,11 @@ export async function GET(event) {
 	if (!federation.entities.find((entity) => entity.iss === iss)) {
 		return json({ error: 'Entity not found in federation' }, { status: 404 });
 	}
-	const entity = await getEntity(event.params.env, iss, true);
+	let entity;
+	try {
+		entity = await getEntity(event.params.env, iss, true);
+	} catch (e: any) {
+		return json({ error: e.message }, { status: 500 });
+	}
 	return json(entity);
 }

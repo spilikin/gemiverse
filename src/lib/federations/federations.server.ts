@@ -169,7 +169,11 @@ async function fetchEntity(iss: string) {
 			uris.push(m.signed_jwks_uri);
 		}
 		for (const url of uris) {
-			hostnames.add(new URL(url).hostname);
+			try {
+				hostnames.add(new URL(url).hostname);
+			} catch (e) {
+				throw new Error(`Invalid URL in redirect_uris: '${url}'`);
+			}
 		}
 	}
 
