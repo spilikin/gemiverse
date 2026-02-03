@@ -1,6 +1,6 @@
 <script lang="ts">
     import { page } from '$app/state';  
-    import "carbon-components-svelte/css/white.css";
+    import "carbon-components-svelte/css/g10.css";
     import {AppVersion, BuildDate} from "$lib/version";
     import {
       Header,
@@ -28,7 +28,7 @@
     <title>gematik Universe</title>
   </velte:head>
   
-  <Header companyName="gematik" platformName="Universe" bind:isSideNavOpen>
+  <Header company="gematik" platformName="Universe" bind:isSideNavOpen>
     <HeaderUtilities>
       <HeaderAction bind:isOpen>
         <HeaderPanelLinks>

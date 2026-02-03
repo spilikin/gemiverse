@@ -59,11 +59,9 @@
 <div class="buttons-bar">
 	<Button 
 	kind="tertiary"
-	iconDescription="Export"
-	icon={Download}
-	size="small"
+	size="sm"
 	href={`/api/federations/${data.env}/export`}
-	>Export</Button>
+	><Download /> Export</Button>
 </div>
 <h2>{getEnvLabel(data.env)}-Föderation</h2>
 <h4>{data.fed.master.iss}</h4>
