@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import 'carbon-components-svelte/css/g10.css';
+	import 'carbon-components-svelte/css/all.css';
 	import { AppVersion, BuildDate } from '$lib/version';
 	import {
 		Header,
