@@ -15,8 +15,8 @@
       SideNavMenu,
       SideNavMenuItem,
     } from "carbon-components-svelte";
-    let isOpen = false
-    let isSideNavOpen = true
+    let isOpen = $state(false)
+    let isSideNavOpen = $state(true)
 
 
     function isSelected(path: string): boolean {
@@ -28,7 +28,7 @@
     <title>gematik Universe</title>
   </velte:head>
   
-  <Header company="gematik" platformName="Universe" bind:isSideNavOpen>
+  <Header companyName="gematik" platformName="Universe" bind:isSideNavOpen>
     <HeaderUtilities>
       <HeaderAction bind:isOpen>
         <HeaderPanelLinks>

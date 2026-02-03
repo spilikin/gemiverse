@@ -18,7 +18,7 @@ export async function GET(event) {
     let now = new Date();
     let filename = `federation_${env}_${now.toISOString().replace(/:/g, '-').split('.')[0]}_export.xlsx`;
 
-    return new Response(bytes, {
+    return new Response(new Uint8Array(bytes), {
         headers: {
             'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             'Content-Disposition': `attachment; filename="${filename}"`
