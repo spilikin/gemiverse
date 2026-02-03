@@ -1,62 +1,69 @@
 <script lang="ts">
-    import { page } from '$app/state';  
-    import "carbon-components-svelte/css/g10.css";
-    import {AppVersion, BuildDate} from "$lib/version";
-    import {
-      Header,
-      HeaderUtilities,
-      HeaderAction,
-      HeaderPanelLinks,
-      HeaderPanelDivider,
-      HeaderPanelLink,
-      Content,
-      SideNav,
-      SideNavItems,
-      SideNavMenu,
-      SideNavMenuItem,
-    } from "carbon-components-svelte";
-    
-    let { children } = $props();
-    
-    let isOpen = $state(false)
-    let isSideNavOpen = $state(true)
+	import { page } from '$app/state';
+	import 'carbon-components-svelte/css/g10.css';
+	import { AppVersion, BuildDate } from '$lib/version';
+	import {
+		Header,
+		HeaderUtilities,
+		HeaderAction,
+		HeaderPanelLinks,
+		HeaderPanelDivider,
+		HeaderPanelLink,
+		Content,
+		SideNav,
+		SideNavItems,
+		SideNavMenu,
+		SideNavMenuItem
+	} from 'carbon-components-svelte';
 
+	let { children } = $props();
 
-    function isSelected(path: string): boolean {
-      return page.url.pathname.startsWith(path);
-    }
-  </script>
-  
-  <velte:head>
-    <title>gematik Universe</title>
-  </velte:head>
-  
-  <Header company="gematik" platformName="Universe" bind:isSideNavOpen>
-    <HeaderUtilities>
-      <HeaderAction bind:isOpen>
-        <HeaderPanelLinks>
-          <HeaderPanelDivider>v{AppVersion} {BuildDate}</HeaderPanelDivider>
-        </HeaderPanelLinks>
-      </HeaderAction>
-    </HeaderUtilities>
+	let isOpen = $state(false);
+	let isSideNavOpen = $state(true);
 
-  </Header>
-  
-  <SideNav isOpen={isSideNavOpen}>
-    <SideNavItems>
-        <SideNavMenu text="Federations" expanded={true}>
-            <SideNavMenuItem href="/federations/test" isSelected={isSelected("/federations/test")}>Test</SideNavMenuItem>
-            <SideNavMenuItem href="/federations/ref" isSelected={isSelected("/federations/ref")}>Referenz</SideNavMenuItem>
-            <SideNavMenuItem href="/federations/prod" isSelected={isSelected("/federations/prod")}>Produktiv</SideNavMenuItem>
-        </SideNavMenu>
-        <SideNavMenu text="Trusted Lists" expanded={true}>
-            <SideNavMenuItem href="/tsl/test" isSelected={isSelected("/tsl/test")}>Test</SideNavMenuItem>
-            <SideNavMenuItem href="/tsl/ref" isSelected={isSelected("/tsl/ref")}>Referenz</SideNavMenuItem>
-            <SideNavMenuItem href="/tsl/prod" isSelected={isSelected("/tsl/prod")}>Produktiv</SideNavMenuItem>
-      </SideNavMenu>
-    </SideNavItems>
-  </SideNav>
+	function isSelected(path: string): boolean {
+		return page.url.pathname.startsWith(path);
+	}
+</script>
 
-  <Content>
-  {@render children()}
-  </Content>
+<velte:head>
+	<title>gematik Universe</title>
+</velte:head>
+
+<Header company="gematik" platformName="Universe" bind:isSideNavOpen>
+	<HeaderUtilities>
+		<HeaderAction bind:isOpen>
+			<HeaderPanelLinks>
+				<HeaderPanelLink href="#">v{AppVersion} {BuildDate}</HeaderPanelLink>
+			</HeaderPanelLinks>
+		</HeaderAction>
+	</HeaderUtilities>
+</Header>
+
+<SideNav isOpen={isSideNavOpen}>
+	<SideNavItems>
+		<SideNavMenu text="Federations" expanded={true}>
+			<SideNavMenuItem href="/federations/test" isSelected={isSelected('/federations/test')}
+				>Test</SideNavMenuItem
+			>
+			<SideNavMenuItem href="/federations/ref" isSelected={isSelected('/federations/ref')}
+				>Referenz</SideNavMenuItem
+			>
+			<SideNavMenuItem href="/federations/prod" isSelected={isSelected('/federations/prod')}
+				>Produktiv</SideNavMenuItem
+			>
+		</SideNavMenu>
+		<SideNavMenu text="Trusted Lists" expanded={true}>
+			<SideNavMenuItem href="/tsl/test" isSelected={isSelected('/tsl/test')}>Test</SideNavMenuItem>
+			<SideNavMenuItem href="/tsl/ref" isSelected={isSelected('/tsl/ref')}>Referenz</SideNavMenuItem
+			>
+			<SideNavMenuItem href="/tsl/prod" isSelected={isSelected('/tsl/prod')}
+				>Produktiv</SideNavMenuItem
+			>
+		</SideNavMenu>
+	</SideNavItems>
+</SideNav>
+
+<Content>
+	{@render children()}
+</Content>

@@ -9,8 +9,7 @@
 		StructuredListBody,
 		StructuredListRow,
 		StructuredListCell,
-		Tag,
-		Loading
+		Tag
 	} from 'carbon-components-svelte';
 	import CloseFilled from 'carbon-icons-svelte/lib/CloseFilled.svelte';
 
@@ -23,16 +22,11 @@
 		return undefined;
 	}
 
-	import { navigating } from '$app/state';
-
 	function openEntity(entity: Entity) {
 		goto(`/federations/${env}/entities/${encodeEntityIdentifier(entity.statement!)}`);
 	}
 </script>
 
-{#if navigating.to != null}
-	<Loading />
-{/if}
 <StructuredList selection>
 	<StructuredListHead>
 		<StructuredListRow head>
