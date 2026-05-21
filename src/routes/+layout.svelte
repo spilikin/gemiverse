@@ -26,9 +26,9 @@
 	}
 </script>
 
-<velte:head>
+<svelte:head>
 	<title>gematik Universe</title>
-</velte:head>
+</svelte:head>
 
 <Header company="gematik" platformName="Universe" bind:isSideNavOpen>
 	<HeaderUtilities>
