@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type { Federation } from '$lib/federations/federations';
-	export let fed: Federation;
 	import {
 		StructuredList,
 		StructuredListBody,
@@ -8,6 +7,8 @@
 		StructuredListCell,
 		CodeSnippet
 	} from 'carbon-components-svelte';
+
+	let { fed }: { fed: Federation } = $props();
 
 	function toPrettyJSON(o: object | undefined) {
 		return JSON.stringify(o, null, 2);

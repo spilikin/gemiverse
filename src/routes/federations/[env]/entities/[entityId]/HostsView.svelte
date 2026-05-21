@@ -13,7 +13,7 @@
 	import WarningAltFilled from 'carbon-icons-svelte/lib/WarningAltFilled.svelte';
 	import CheckmarkFilled from 'carbon-icons-svelte/lib/CheckmarkFilled.svelte';
 
-	export let hosts: HostInfo[];
+	let { hosts }: { hosts: HostInfo[] } = $props();
 
 	function ca(host: HostInfo) {
 		if (host.certificates && host.certificates.length > 0) {

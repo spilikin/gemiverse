@@ -16,8 +16,7 @@
 
 	import HostsView from './HostsView.svelte';
 
-	export let entity: Entity;
-	export let rp: OpenidRelyingParty;
+	let { entity, rp }: { entity: Entity; rp: OpenidRelyingParty } = $props();
 
 	function notAfter(cert: CertificateInfo) {
 		return new Date(cert.notAfter).toISOString().split('T')[0];

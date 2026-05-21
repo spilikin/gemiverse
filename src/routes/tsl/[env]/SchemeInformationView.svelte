@@ -6,17 +6,10 @@
 
 	import StructuredListField from './StructuredListField.svelte';
 
-	export let tsl: ITrustServiceStatusList;
+	let { tsl }: { tsl: ITrustServiceStatusList } = $props();
 
-	import { afterUpdate } from 'svelte';
-
-	let primaryLocation: string;
-	let backupLocation: string;
-
-	afterUpdate(() => {
-		primaryLocation = getPrimaryLocation(tsl.schemeInformation);
-		backupLocation = getBackupLocation(tsl.schemeInformation);
-	});
+	const primaryLocation = $derived(getPrimaryLocation(tsl.schemeInformation));
+	const backupLocation = $derived(getBackupLocation(tsl.schemeInformation));
 
 	function formatDateTime(isoString: string | null): string {
 		if (!isoString || isoString === '') {
@@ -66,16 +59,3 @@
 		</StructuredListField>
 	</StructuredListBody>
 </StructuredList>
-
-<style>
-	:global {
-		.scheme-info-icon {
-			width: 20px;
-			height: 20px;
-		}
-		.scheme-info-label {
-			font-weight: bold;
-			width: 200px;
-		}
-	}
-</style>

@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { CodeSnippet } from 'carbon-components-svelte';
 
-	export let content: object;
+	let { content }: { content: object } = $props();
 
-	export function toPrettyJSON(c: object) {
+	function toPrettyJSON(c: object) {
 		return JSON.stringify(c, null, 2);
 	}
 </script>

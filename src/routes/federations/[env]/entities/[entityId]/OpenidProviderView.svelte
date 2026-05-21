@@ -11,8 +11,7 @@
 	} from 'carbon-components-svelte';
 	import HostsView from './HostsView.svelte';
 
-	export let entity: Entity;
-	export let op: OpenidProvider;
+	let { entity, op }: { entity: Entity; op: OpenidProvider } = $props();
 </script>
 
 <StructuredList>

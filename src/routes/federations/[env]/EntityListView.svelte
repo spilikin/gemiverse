@@ -2,8 +2,6 @@
 	import { type Entity, encodeEntityIdentifier } from '$lib/federations/federations';
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
-	export let env = '';
-	export let entities: Entity[] = [];
 	import {
 		StructuredList,
 		StructuredListHead,
@@ -13,6 +11,8 @@
 		Tag
 	} from 'carbon-components-svelte';
 	import CloseFilled from 'carbon-icons-svelte/lib/CloseFilled.svelte';
+
+	let { env = '', entities = [] }: { env?: string; entities?: Entity[] } = $props();
 
 	function openEntity(entity: Entity) {
 		goto(

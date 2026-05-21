@@ -8,7 +8,7 @@
 	import WarningAltFilled from 'carbon-icons-svelte/lib/WarningAltFilled.svelte';
 	import { onMount } from 'svelte';
 
-	export let data: PageData;
+	let { data }: { data: PageData } = $props();
 
 	function name() {
 		if (data.entity.statement?.metadata.openid_provider) {

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { IPostalAddress } from '$lib/tsl/tsl';
-	export let postal: IPostalAddress;
+	let { postal }: { postal: IPostalAddress } = $props();
 </script>
 
 <div class="postal">

@@ -9,14 +9,16 @@
 		StructuredListCell,
 		Tag
 	} from 'carbon-components-svelte';
-	export let tsl: ITrustServiceStatusList;
 
-	// Sort the trustServiceProviderList alphabetically by tspName before display
-	$: sortedProviders = tsl.trustServiceProviderList.slice().sort((a, b) => {
-		const nameA = getMultilangText(a.tspInformation.tspName).toLowerCase();
-		const nameB = getMultilangText(b.tspInformation.tspName).toLowerCase();
-		return nameA.localeCompare(nameB);
-	});
+	let { tsl }: { tsl: ITrustServiceStatusList } = $props();
+
+	const sortedProviders = $derived(
+		tsl.trustServiceProviderList.slice().sort((a, b) => {
+			const nameA = getMultilangText(a.tspInformation.tspName).toLowerCase();
+			const nameB = getMultilangText(b.tspInformation.tspName).toLowerCase();
+			return nameA.localeCompare(nameB);
+		})
+	);
 </script>
 
 <StructuredList>
