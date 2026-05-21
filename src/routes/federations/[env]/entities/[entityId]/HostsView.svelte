@@ -113,6 +113,3 @@
 		{/each}
 	</StructuredListBody>
 </StructuredList>
-
-<style>
-</style>

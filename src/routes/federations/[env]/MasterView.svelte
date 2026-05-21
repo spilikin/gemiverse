@@ -16,36 +16,37 @@
 </script>
 
 <style>
-    :global(.icon) {
-        width: 20px;
-        height: 20px;
-    }
-    :global(.label) {
-        font-weight: bold;
-        width: 200px;
+    :global {
+        .master-view-icon {
+            width: 20px;
+            height: 20px;
+        }
+        .master-view-label {
+            font-weight: bold;
+            width: 200px;
+        }
     }
 </style>
-        
 
 <StructuredList>
     <StructuredListBody>
         <StructuredListRow>
-            <StructuredListCell class="icon">
+            <StructuredListCell class="master-view-icon">
             </StructuredListCell>
-            <StructuredListCell class="label">
+            <StructuredListCell class="master-view-label">
                 Issuer
             </StructuredListCell>
-            <StructuredListCell class="value">
+            <StructuredListCell class="master-view-value">
                 {fed.master.iss}
             </StructuredListCell>
         </StructuredListRow>
         <StructuredListRow>
-            <StructuredListCell class="icon">
+            <StructuredListCell class="master-view-icon">
             </StructuredListCell>
-            <StructuredListCell class="label">
+            <StructuredListCell class="master-view-label">
                 Public key
             </StructuredListCell>
-            <StructuredListCell class="value">
+            <StructuredListCell class="master-view-value">
                 <CodeSnippet type="multi" light={true} expanded>{toPrettyJSON(fed.master.jwks?.keys[0])}</CodeSnippet>
             </StructuredListCell>
         </StructuredListRow>

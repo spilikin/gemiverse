@@ -55,12 +55,12 @@
 	<BreadcrumbItem isCurrentPage={true}>{getEnvLabel(data.env)}</BreadcrumbItem>
 </Breadcrumb>
 
-<div class="buttons-bar">
+<div class="heading-bar">
+	<h2>{getEnvLabel(data.env)}-Föderation</h2>
 	<Button kind="tertiary" size="sm" href={`/api/federations/${data.env}/export`} download
 		><Download /> Export</Button
 	>
 </div>
-<h2>{getEnvLabel(data.env)}-Föderation</h2>
 <h4>{data.fed.master.iss}</h4>
 <Tabs class="tabs">
 	<Tab label="Alle" href="#all" on:click={tabClick} />
@@ -78,7 +78,13 @@
 </Tabs>
 
 <style>
-	.buttons-bar {
-		float: right;
+	.heading-bar {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+	}
+	.heading-bar h2 {
+		margin: 0;
 	}
 </style>
