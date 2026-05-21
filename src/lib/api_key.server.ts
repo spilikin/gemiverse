@@ -1,7 +1,7 @@
-var apiKeys: Map<string, string> | undefined = undefined;
+let apiKeys: Map<string, string> | undefined = undefined;
 
 export function httpInitForURL(url: string): RequestInit {
-	var init = {};
+	let init = {};
 
 	// parse string to URL and get host
 	const host = new URL(url).host;

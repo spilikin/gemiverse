@@ -4,15 +4,20 @@
 	import RawDataView from '../../RawDataView.svelte';
 	import SchemeInformationView from './SchemeInformationView.svelte';
 	import ServiceProvidersView from './ServiceProvidersView.svelte';
+	import {
+		Breadcrumb,
+		BreadcrumbItem,
+		Tabs,
+		Tab,
+		TabContent,
+		Loading
+	} from 'carbon-components-svelte';
+	import { onMount } from 'svelte';
 
 	import type { PageData } from './$types';
-	export let data: PageData;
 
-	export let loading = true;
-	import { Breadcrumb, BreadcrumbItem, Tabs, Tab, TabContent } from 'carbon-components-svelte';
-
-	import { onMount } from 'svelte';
-	import { goto } from '$app/navigation';
+	let { data }: { data: PageData } = $props();
+	let loading = $state(true);
 
 	onMount(() => {
 		const hash = window.location.hash;
@@ -25,7 +30,8 @@
 	});
 
 	function tabClick(event: MouseEvent) {
-		goto((event.target as HTMLAnchorElement).href, { replaceState: true });
+		const hash = (event.target as HTMLAnchorElement).hash;
+		history.replaceState(history.state, '', hash);
 	}
 
 	beforeNavigate(() => {
@@ -36,6 +42,10 @@
 		loading = false;
 	});
 </script>
+
+{#if loading}
+	<Loading />
+{/if}
 
 <Breadcrumb>
 	<BreadcrumbItem href="/tsl">Trusted Lists</BreadcrumbItem>

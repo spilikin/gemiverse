@@ -3,7 +3,6 @@
 	export let fed: Federation;
 	import {
 		StructuredList,
-		StructuredListHead,
 		StructuredListBody,
 		StructuredListRow,
 		StructuredListCell,

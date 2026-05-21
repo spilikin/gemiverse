@@ -134,7 +134,7 @@ function toDateISOString(el: Element | null): string {
 	if (!el || !el.textContent) {
 		return '';
 	}
-	var dateText = el.textContent;
+	let dateText = el.textContent;
 	dateText = dateText.trim();
 	const date = new Date(dateText);
 	if (isNaN(date.getTime())) {
@@ -191,13 +191,13 @@ class DigitalIdentity {
 	x509SubjectKeyIdentifier: string | null = null;
 	constructor(el: Element) {
 		if (el.querySelector('X509Certificate')) {
-			const base64encoded = el.querySelector('X509Certificate')!!.textContent!!;
+			const base64encoded = el.querySelector('X509Certificate')!.textContent!;
 			const x509 = parseCertificateFromBase64(base64encoded);
 			this.x509Certificate = encodeCertificateToPEM(x509);
 			this.certificateInfo = toCertificateInfo(x509);
 		}
 		if (el.querySelector('X509SKI')) {
-			this.x509SubjectKeyIdentifier = el.querySelector('X509SKI')!!.textContent!!;
+			this.x509SubjectKeyIdentifier = el.querySelector('X509SKI')!.textContent!;
 		}
 	}
 }
@@ -366,8 +366,8 @@ class PostalAddress {
 }
 
 function queryWithNamespace(el: Element, namespace: string, localName: string): Element | null {
-	var result: Element | null = null;
-	for (let child of el.children) {
+	let result: Element | null = null;
+	for (const child of el.children) {
 		if (child.namespaceURI === namespace && child.localName === localName) {
 			result = child;
 			break;
@@ -384,7 +384,7 @@ export function parseTrustServiceStatusList(xml: string): TrustServiceStatusList
 }
 
 function toMultiLangString(el: Element): MultiLangString {
-	var txt = el.textContent || '';
+	let txt = el.textContent || '';
 	// trim new line and spaces beforre and after
 
 	txt = txt.trim();

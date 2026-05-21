@@ -1,5 +1,5 @@
 import { getFederationExportXLSX } from '$lib/federations/federations.server';
-import { error, json } from '@sveltejs/kit';
+import { error } from '@sveltejs/kit';
 
 export async function GET(event) {
 	const env = event.params.env;
@@ -16,8 +16,8 @@ export async function GET(event) {
 	}
 
 	// filename is federation_{env}_{yyyy-mm-dd-HH:MM:SS}_export.xlsx
-	let now = new Date();
-	let filename = `federation_${env}_${now.toISOString().replace(/:/g, '-').split('.')[0]}_export.xlsx`;
+	const now = new Date();
+	const filename = `federation_${env}_${now.toISOString().replace(/:/g, '-').split('.')[0]}_export.xlsx`;
 
 	return new Response(new Uint8Array(bytes), {
 		headers: {

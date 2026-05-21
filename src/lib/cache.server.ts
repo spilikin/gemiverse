@@ -1,7 +1,7 @@
 import Valkey from 'iovalkey';
 
 // Create a new Redis instance with url from REDIST_URL environment variable
-var _valkey: Valkey | null = null;
+let _valkey: Valkey | null = null;
 
 function openValkey() {
 	if (_valkey) {
@@ -17,8 +17,8 @@ export async function loadObjectFromCache<T>(
 	fetch: () => Promise<T | null>,
 	exp: number | undefined = undefined
 ): Promise<T | null> {
-	let valkey = openValkey();
-	let cache = async (obj: T) => {
+	const valkey = openValkey();
+	const cache = async (obj: T) => {
 		if (exp) {
 			valkey.set(key, JSON.stringify(obj), 'EX', exp);
 		} else {

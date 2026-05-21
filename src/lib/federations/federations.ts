@@ -130,21 +130,21 @@ export interface Federation {
 
 export function parseDistinguishedName(dn: string): Map<string, string[]> {
 	// Replace the pattern with a delimiter
-	let replacedStr = dn.replace(/([a-zA-Z]+)=/g, '|$1|');
+	const replacedStr = dn.replace(/([a-zA-Z]+)=/g, '|$1|');
 
 	// Split the string using the delimiter
-	let parts = replacedStr.split('|').map((s) => s.trim());
+	const parts = replacedStr.split('|').map((s) => s.trim());
 
 	if (parts[0] === '') {
 		parts.shift();
 	}
 
 	// Create a map of the key value pairs
-	let result = new Map<string, string[]>();
+	const result = new Map<string, string[]>();
 
 	for (let i = 0; i < parts.length; i += 2) {
-		let key = parts[i];
-		let value = parts[i + 1];
+		const key = parts[i];
+		const value = parts[i + 1];
 		if (result.has(key)) {
 			result.get(key)?.push(value);
 		} else {

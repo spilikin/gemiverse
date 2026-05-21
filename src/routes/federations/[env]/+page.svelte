@@ -2,8 +2,6 @@
 	import { getEnvLabel } from '$lib';
 	import type { PageData } from './$types';
 	import { beforeNavigate, afterNavigate } from '$app/navigation';
-	export let data: PageData;
-	export let loading = true;
 	import {
 		Breadcrumb,
 		BreadcrumbItem,
@@ -13,15 +11,14 @@
 		Button,
 		Loading
 	} from 'carbon-components-svelte';
-
 	import Download from 'carbon-icons-svelte/lib/Download.svelte';
-
 	import RawDataView from '../../RawDataView.svelte';
 	import EntityListView from './EntityListView.svelte';
 	import MasterView from './MasterView.svelte';
 	import { onMount } from 'svelte';
-	import { goto } from '$app/navigation';
-	import { navigating } from '$app/state';
+
+	let { data }: { data: PageData } = $props();
+	let loading = $state(true);
 
 	onMount(() => {
 		const hash = window.location.hash;
@@ -34,7 +31,8 @@
 	});
 
 	function tabClick(event: MouseEvent) {
-		goto((event.target as HTMLAnchorElement).href, { replaceState: true });
+		const hash = (event.target as HTMLAnchorElement).hash;
+		history.replaceState(history.state, '', hash);
 	}
 
 	beforeNavigate(() => {

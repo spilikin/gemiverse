@@ -2,14 +2,13 @@
 	import { getEnvLabel } from '$lib';
 	import type { PageData } from './$types';
 	import RawDataView from '../../../../RawDataView.svelte';
-	import { goto } from '$app/navigation';
-
-	export let data: PageData;
 	import { Breadcrumb, BreadcrumbItem, Tabs, Tab, TabContent, Tag } from 'carbon-components-svelte';
 	import OpenidProviderView from './OpenidProviderView.svelte';
 	import OpenidRelyingPartyView from './OpenidRelyingPartyView.svelte';
 	import WarningAltFilled from 'carbon-icons-svelte/lib/WarningAltFilled.svelte';
 	import { onMount } from 'svelte';
+
+	export let data: PageData;
 
 	function name() {
 		if (data.entity.statement?.metadata.openid_provider) {
@@ -17,10 +16,6 @@
 		} else if (data.entity.statement?.metadata.openid_relying_party) {
 			return data.entity.statement?.metadata.openid_relying_party?.client_name;
 		}
-	}
-
-	function iss() {
-		return data.entity.statement?.iss;
 	}
 
 	onMount(() => {
@@ -34,7 +29,8 @@
 	});
 
 	function tabClick(event: MouseEvent) {
-		goto((event.target as HTMLAnchorElement).href, { replaceState: true });
+		const hash = (event.target as HTMLAnchorElement).hash;
+		history.replaceState(history.state, '', hash);
 	}
 </script>
 
@@ -77,7 +73,7 @@
 			{#if data.entity.androidLinks?.length == 0}
 				<p><WarningAltFilled fill="orange" /> Keine Android Apps verknüpft</p>
 			{/if}
-			{#each data.entity.androidLinks ?? [] as link}
+			{#each data.entity.androidLinks ?? [] as link (link.target.package_name)}
 				<p>{link.target.package_name}</p>
 			{/each}
 			<br />
@@ -85,11 +81,11 @@
 			{#if data.entity.appleLinks?.length == 0}
 				<p><WarningAltFilled fill="orange" /> Keine Apple Apps verknüpft</p>
 			{/if}
-			{#each data.entity.appleLinks ?? [] as link}
+			{#each data.entity.appleLinks ?? [] as link, i (link.appID ?? i)}
 				{#if link.appID}
 					<p>{link.appID}</p>
 				{/if}
-				{#each link.appIDs || [] as appID}
+				{#each link.appIDs || [] as appID (appID)}
 					<p>{appID}</p>
 				{/each}
 			{/each}

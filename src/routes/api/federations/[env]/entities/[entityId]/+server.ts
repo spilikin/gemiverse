@@ -14,8 +14,8 @@ export async function GET(event) {
 	let entity;
 	try {
 		entity = await getEntity(event.params.env, iss, true);
-	} catch (e: any) {
-		return json({ error: e.message }, { status: 500 });
+	} catch (e) {
+		return json({ error: (e as Error).message }, { status: 500 });
 	}
 	return json(entity);
 }

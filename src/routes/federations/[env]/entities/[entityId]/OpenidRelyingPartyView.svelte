@@ -8,8 +8,7 @@
 		StructuredListBody,
 		StructuredListRow,
 		StructuredListCell,
-		CodeSnippet,
-		Tag
+		CodeSnippet
 	} from 'carbon-components-svelte';
 	import ErrorFilled from 'carbon-icons-svelte/lib/ErrorFilled.svelte';
 	import WarningAltFilled from 'carbon-icons-svelte/lib/WarningAltFilled.svelte';
@@ -67,7 +66,7 @@
 				<img src={rp.logo_uri} alt="Logo" class="logo" />
 			</StructuredListCell>
 		</StructuredListRow>
-		{#each entity.jwksCertificates || [] as certs, keyNum}
+		{#each entity.jwksCertificates || [] as certs, keyNum (keyNum)}
 			{#if certs.length > 0}
 				<StructuredListRow>
 					<StructuredListCell head
@@ -97,7 +96,7 @@
 		<StructuredListRow>
 			<StructuredListCell head>Redirect URIs</StructuredListCell>
 			<StructuredListCell>
-				{#each rp.redirect_uris ?? [] as uri}
+				{#each rp.redirect_uris ?? [] as uri (uri)}
 					<div>{uri}</div>
 				{/each}
 			</StructuredListCell>

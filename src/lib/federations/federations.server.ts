@@ -74,7 +74,7 @@ async function fetchFederation(env: string): Promise<Federation | null> {
 		fqdnMap.get(fqdn)!.push(entityIss);
 	}
 
-	var promisesByFqdn = Array.from(fqdnMap.values()).map(async (issList) => {
+	const promisesByFqdn = Array.from(fqdnMap.values()).map(async (issList) => {
 		return serial(
 			issList.map((iss) => {
 				return async () => {
@@ -116,16 +116,16 @@ async function fetchEntityBase(iss: string): Promise<Entity> {
 			statement: statement
 		};
 	} catch (err) {
-		var anyError = err as any;
-		if (anyError instanceof TypeError) {
-			anyError = anyError.cause as any;
+		let cause = err as Error & { code?: string };
+		if (cause instanceof TypeError && cause.cause) {
+			cause = cause.cause as Error & { code?: string };
 		}
 
 		return {
 			iss: iss,
 			error: {
-				error: anyError.code,
-				error_description: anyError.message
+				error: cause.code ?? '',
+				error_description: cause.message
 			}
 		} as Entity;
 	}
@@ -133,7 +133,7 @@ async function fetchEntityBase(iss: string): Promise<Entity> {
 
 async function fetchEntity(iss: string) {
 	const entity = await fetchEntityBase(iss);
-	var jwks: jose.JSONWebKeySet | undefined = undefined;
+	let jwks: jose.JSONWebKeySet | undefined = undefined;
 	const hostnames = new Set<string>();
 	if (entity.statement?.metadata.openid_provider) {
 		const m = entity.statement.metadata.openid_provider;
@@ -171,13 +171,13 @@ async function fetchEntity(iss: string) {
 		for (const url of uris) {
 			try {
 				hostnames.add(new URL(url).hostname);
-			} catch (e) {
+			} catch {
 				throw new Error(`Invalid URL in redirect_uris: '${url}'`);
 			}
 		}
 	}
 
-	var jwksCertificates = new Array<CertificateInfo[]>();
+	const jwksCertificates = new Array<CertificateInfo[]>();
 	for (const key of jwks?.keys || []) {
 		if (key.x5c) {
 			try {
@@ -215,11 +215,11 @@ async function fetchEntity(iss: string) {
 		})
 	);
 
-	let androidLinks = await fetchAndroidLinks(entity.statement!);
+	const androidLinks = await fetchAndroidLinks(entity.statement!);
 	entity.androidLinks = Array.from(new Set(androidLinks.map((link) => JSON.stringify(link)))).map(
 		(link) => JSON.parse(link)
 	);
-	let appleLinks = await fetchAppleAppLinks(entity.statement!);
+	const appleLinks = await fetchAppleAppLinks(entity.statement!);
 	entity.appleLinks = Array.from(new Set(appleLinks.map((link) => JSON.stringify(link)))).map(
 		(link) => JSON.parse(link)
 	);
@@ -229,7 +229,7 @@ async function fetchEntity(iss: string) {
 async function getHostCertificates(hostname: string): Promise<crypto.X509Certificate[]> {
 	const url = `${CONTROLLER_URL}/cert.cgi?hostname=${hostname}`;
 
-	let text = await loadObjectFromCache<string>(
+	const text = await loadObjectFromCache<string>(
 		url,
 		false,
 		async () => {
@@ -290,7 +290,7 @@ function isLocalhost(hostname: string) {
 }
 
 function getAppBaseUrls(statement: EntityStatement): string[] {
-	var result = new Set<string>();
+	const result = new Set<string>();
 	if (statement.metadata.openid_relying_party) {
 		for (const uri of statement.metadata.openid_relying_party.redirect_uris) {
 			result.add(new URL(uri).origin);
@@ -307,7 +307,7 @@ function getAppBaseUrls(statement: EntityStatement): string[] {
 }
 
 async function fetchAndroidLinks(stmt: EntityStatement): Promise<AndroidAppAsset[]> {
-	var urls = getAppBaseUrls(stmt);
+	const urls = getAppBaseUrls(stmt);
 
 	const promises = urls.map((url) => {
 		url += '/.well-known/assetlinks.json';
@@ -320,8 +320,9 @@ async function fetchAndroidLinks(stmt: EntityStatement): Promise<AndroidAppAsset
 			60
 		)
 			.then((json) => {
-				let obj = JSON.parse(json!);
+				const obj = JSON.parse(json!);
 				if (obj instanceof Array) {
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any
 					return obj.map((asset: any) => {
 						return {
 							namespace: asset['namespace'],
@@ -347,7 +348,7 @@ async function fetchAndroidLinks(stmt: EntityStatement): Promise<AndroidAppAsset
 }
 
 async function fetchAppleAppLinks(stmt: EntityStatement): Promise<AppleAppLink[]> {
-	var urls = getAppBaseUrls(stmt);
+	const urls = getAppBaseUrls(stmt);
 
 	const promises = urls.map((url) => {
 		url += '/.well-known/apple-app-site-association';
@@ -370,7 +371,7 @@ async function fetchAppleAppLinks(stmt: EntityStatement): Promise<AppleAppLink[]
 }
 
 export async function prefetchFederationCache() {
-	var promises = [];
+	const promises = [];
 	for (const env of ['test', 'ref', 'prod']) {
 		promises.push(getFederation(env, true));
 	}
@@ -385,10 +386,10 @@ function generateXLSX(federation: Federation) {
 	const options_entities = {
 		'!cols': [{ wch: 16 }, { wch: 16 }, { wch: 50 }, { wch: 50 }, { wch: 50 }, { wch: 50 }]
 	};
-	let headers_entities = [
+	const headers_entities = [
 		['type', 'cidi', 'iss', 'federation_entity_name', 'organization_name', 'error']
 	];
-	let data_entities = federation.entities
+	const data_entities = federation.entities
 		.map((entity) => {
 			return [
 				entity.type || '',
@@ -416,7 +417,7 @@ function generateXLSX(federation: Federation) {
 			{ wch: 50 }
 		]
 	};
-	let headers_openid_providers = [
+	const headers_openid_providers = [
 		[
 			'type',
 			'cidi',
@@ -428,7 +429,7 @@ function generateXLSX(federation: Federation) {
 			'error'
 		]
 	];
-	let data_openid_providers = federation.entities
+	const data_openid_providers = federation.entities
 		.filter((entity) => entity.type == EntityType.OpenidProvider)
 		.map((entity) => {
 			return [
@@ -457,11 +458,11 @@ function generateXLSX(federation: Federation) {
 		]
 	};
 
-	let headers_relying_parties = [
+	const headers_relying_parties = [
 		['type', 'cidi', 'iss', 'federation_entity_name', 'organization_name', 'scope', 'error']
 	];
 
-	let data_relying_parties = federation.entities
+	const data_relying_parties = federation.entities
 		.filter((entity) => entity.type == EntityType.OpenidRelyingParty)
 		.map((entity) => {
 			return [
@@ -476,7 +477,7 @@ function generateXLSX(federation: Federation) {
 		})
 		.sort((a, b) => a[2].localeCompare(b[2]));
 
-	var buffer = xlsx.build([
+	const buffer = xlsx.build([
 		{ name: 'Entities', data: headers_entities.concat(data_entities), options: options_entities },
 		{
 			name: 'OpenIDProviders',
@@ -499,13 +500,18 @@ export async function getFederationExportXLSX(
 ): Promise<Buffer | null> {
 	const key = `federations:${env}:xlsx`;
 
-	let str = await loadObjectFromCache<string>(key, forceFetch, async () => {
-		let fed = await getFederation(env);
-		if (!fed) {
-			throw new Error('Federation not found');
-		}
-		return generateXLSX(fed).toString('base64');
-	});
+	const str = await loadObjectFromCache<string>(
+		key,
+		forceFetch,
+		async () => {
+			const fed = await getFederation(env);
+			if (!fed) {
+				throw new Error('Federation not found');
+			}
+			return generateXLSX(fed).toString('base64');
+		},
+		exp
+	);
 
 	if (!str) {
 		return null;

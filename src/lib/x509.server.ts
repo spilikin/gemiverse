@@ -15,7 +15,7 @@ export function encodeCertificateToPEM(x509: crypto.X509Certificate): string {
 }
 
 export function toCertificateInfo(x509: crypto.X509Certificate): CertificateInfo {
-	var keyAlg;
+	let keyAlg;
 	if (x509.publicKey.asymmetricKeyType == 'ec') {
 		keyAlg = x509.publicKey.asymmetricKeyDetails?.namedCurve;
 	} else {

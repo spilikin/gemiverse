@@ -39,7 +39,7 @@
 		</StructuredListField>
 		{#if tsl.schemeInformation.nextUpdate}
 			<StructuredListField label="Next Update">
-				{#each tsl.schemeInformation.nextUpdate as nextUpdate}
+				{#each tsl.schemeInformation.nextUpdate as nextUpdate (nextUpdate)}
 					{formatDateTime(nextUpdate)}<br />
 				{/each}
 			</StructuredListField>
@@ -54,7 +54,7 @@
 			{getMultilangText(tsl.schemeInformation.schemeOperatorName)}
 		</StructuredListField>
 		<StructuredListField label="Postal Address">
-			{#each tsl.schemeInformation.schemeOperatorAddress.postalAddresses as postal}
+			{#each tsl.schemeInformation.schemeOperatorAddress.postalAddresses as postal, i (i)}
 				<AddressView {postal} />
 			{/each}
 		</StructuredListField>
@@ -68,12 +68,14 @@
 </StructuredList>
 
 <style>
-	:global(.icon) {
-		width: 20px;
-		height: 20px;
-	}
-	:global(.label) {
-		font-weight: bold;
-		width: 200px;
+	:global {
+		.scheme-info-icon {
+			width: 20px;
+			height: 20px;
+		}
+		.scheme-info-label {
+			font-weight: bold;
+			width: 200px;
+		}
 	}
 </style>

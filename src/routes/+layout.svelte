@@ -7,7 +7,6 @@
 		HeaderUtilities,
 		HeaderAction,
 		HeaderPanelLinks,
-		HeaderPanelDivider,
 		HeaderPanelLink,
 		Content,
 		SideNav,

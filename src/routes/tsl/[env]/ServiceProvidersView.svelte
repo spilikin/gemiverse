@@ -22,20 +22,20 @@
 <StructuredList>
 	<StructuredListHead>
 		<StructuredListRow head>
-			<StructuredListCell head class="icon"></StructuredListCell>
+			<StructuredListCell head></StructuredListCell>
 			<StructuredListCell head>Provider</StructuredListCell>
 			<StructuredListCell head>Scope</StructuredListCell>
 		</StructuredListRow>
 	</StructuredListHead>
 	<StructuredListBody>
-		{#each sortedProviders as provider}
+		{#each sortedProviders as provider, i (i)}
 			<StructuredListRow>
 				<StructuredListCell></StructuredListCell>
 				<StructuredListCell>
 					{getMultilangText(provider.tspInformation.tspName)}
 				</StructuredListCell>
 				<StructuredListCell>
-					{#each getTSPScope(provider) as scope}
+					{#each getTSPScope(provider) as scope (scope)}
 						<Tag type={getScopeColor(scope)}>{getScopeLabel(scope)}</Tag>
 					{/each}
 				</StructuredListCell>
@@ -43,6 +43,3 @@
 		{/each}
 	</StructuredListBody>
 </StructuredList>
-
-<style>
-</style>

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { type Entity, encodeEntityIdentifier } from '$lib/federations/federations';
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	export let env = '';
 	export let entities: Entity[] = [];
 	import {
@@ -13,17 +14,13 @@
 	} from 'carbon-components-svelte';
 	import CloseFilled from 'carbon-icons-svelte/lib/CloseFilled.svelte';
 
-	function logo(entity: Entity) {
-		if (entity.statement?.metadata.openid_provider?.logo_uri) {
-			return entity.statement?.metadata.openid_provider?.logo_uri;
-		} else if (entity.statement?.metadata.openid_relying_party?.logo_uri) {
-			return entity.statement?.metadata.openid_relying_party?.logo_uri;
-		}
-		return undefined;
-	}
-
 	function openEntity(entity: Entity) {
-		goto(`/federations/${env}/entities/${encodeEntityIdentifier(entity.statement!)}`);
+		goto(
+			resolve('/federations/[env]/entities/[entityId]', {
+				env,
+				entityId: encodeEntityIdentifier(entity.statement!)
+			})
+		);
 	}
 </script>
 
@@ -35,7 +32,7 @@
 		</StructuredListRow>
 	</StructuredListHead>
 	<StructuredListBody>
-		{#each entities as entity}
+		{#each entities as entity (entity.iss)}
 			{#if entity.error}
 				<StructuredListRow>
 					<StructuredListCell>

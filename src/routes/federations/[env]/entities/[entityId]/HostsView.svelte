@@ -83,7 +83,7 @@
 		</StructuredListRow>
 	</StructuredListHead>
 	<StructuredListBody>
-		{#each hosts as host}
+		{#each hosts as host (host.name)}
 			<StructuredListRow>
 				<StructuredListCell>{host.name}</StructuredListCell>
 

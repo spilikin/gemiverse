@@ -117,6 +117,7 @@ export interface IPostalAddress {
 	countryName: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ICertificateInfo {
 	// Define the structure of CertificateInfo if available
 }
