@@ -1,2 +1,32 @@
-packages-lock.json
+.DS_Store
+.git
+.gitignore
+
+# Build artifacts (regenerated inside the container)
+.svelte-kit
+build
 node_modules
+
+# Local env / secrets
+.env
+.env.*
+!.env.example
+
+# Editor / tooling caches
+.vscode
+.idea
+.claude
+*.log
+
+# Docker configs (not needed inside the image)
+Dockerfile
+docker-compose-*.yaml
+.dockerignore
+
+# Docs
+README.md
+
+# Reverse-proxy persistent state (kept out of the image)
+caddy_data
+caddy_config
+valkey_data
