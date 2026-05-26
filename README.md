@@ -1,9 +1,9 @@
 # gematik Universe: Display Information about gematik public APIs
 
-
 ## Develop
 
-Start Redis: 
+Start Redis:
+
 ```bash
 docker compose -f docker-compose-dev.yaml up -d
 ```

@@ -1,5 +1,5 @@
 set export := true
-VERSION := "2.1.1"
+VERSION := "2.5.1"
 DOCKER_IMAGE := "spilikin/gemiverse"
 
 # Display available commands
@@ -24,10 +24,10 @@ dockerpush: dockerbuild
 	docker push {{DOCKER_IMAGE}}:latest
 
 # Deploy app to VM
-deploy: 
+deploy:
+	ssh gemiverse.spilikin.dev docker-compose down --remove-orphans
 	scp docker-compose-deployment.yaml gemiverse.spilikin.dev:docker-compose.yaml
 	scp -r ./controller gemiverse.spilikin.dev:.
 	ssh gemiverse.spilikin.dev docker-compose pull
 	ssh gemiverse.spilikin.dev docker-compose build
-	ssh gemiverse.spilikin.dev docker-compose down --remove-orphans
 	ssh gemiverse.spilikin.dev docker-compose up -d

@@ -2,8 +2,8 @@ services:
   reverse-proxy:
     image: caddy:latest
     ports:
-      - "80:80"
-      - "443:443"
+      - '80:80'
+      - '443:443'
     configs:
       - source: Caddyfile
         target: /etc/caddy/Caddyfile
@@ -13,40 +13,45 @@ services:
     volumes:
       - ./caddy_data:/data
       - ./caddy_config:/config
-  
+
   controller:
     build: ./controller
     ports:
-      - "3001:80"
+      - '3001:80'
     volumes:
       - ./controller/cert.cgi:/var/www/localhost/htdocs/cert.cgi
 
-
   cache:
-    image: redis:alpine
+    image: valkey/valkey
     restart: always
+    volumes:
+      - ./valkey_data:/data
 
   app:
     image: spilikin/gemiverse
     ports:
-      - "3000:3000"
+      - '3000:3000'
     depends_on:
       - cache
       - controller
     environment:
       - REDIS_HOST=cache
       - CONTROLLER_URL=http://controller
-    
+      - API_KEYS=${API_KEYS}
+
 configs:
   Caddyfile:
     content: |
       {
         email cloud@spilikin.dev
       }
-      gemiverse.spilikin.dev {
+      gemiverse.gematik.solutions {
         @blocked {
           path /_internal/*
         }
         respond @blocked 404
         reverse_proxy app:3000
+      }
+      gemiverse.spilikin.dev {
+        redir https://gemiverse.gematik.solutions{uri} permanent
       }
