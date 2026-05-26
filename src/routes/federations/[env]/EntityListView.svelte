@@ -40,7 +40,10 @@
 					</StructuredListCell>
 					<StructuredListCell>
 						<div>{entity.iss}</div>
-						<div><CloseFilled fill="red" /> {entity.error.error_description}</div>
+						<div>
+							<CloseFilled fill="var(--bx-support-error)" />
+							{entity.error.error_description}
+						</div>
 					</StructuredListCell>
 				</StructuredListRow>
 			{:else}
@@ -80,9 +83,9 @@
 
 	.cidi {
 		font-size: 0.8em;
-		color: #666;
-		background-color: #f4f4f4;
-		font-family: monospace;
+		color: var(--bx-text-secondary);
+		background-color: var(--bx-layer-01);
+		font-family: var(--bx-code-02-font-family, ui-monospace, monospace);
 		display: inline-block;
 		padding-right: 0.5em;
 		padding-left: 0.5em;

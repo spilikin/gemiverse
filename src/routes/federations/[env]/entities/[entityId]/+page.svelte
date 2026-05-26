@@ -71,7 +71,7 @@
 		<TabContent>
 			<h4>Android Apps</h4>
 			{#if data.entity.androidLinks?.length == 0}
-				<p><WarningAltFilled fill="orange" /> Keine Android Apps verknüpft</p>
+				<p><WarningAltFilled fill="var(--bx-support-warning)" /> Keine Android Apps verknüpft</p>
 			{/if}
 			{#each data.entity.androidLinks ?? [] as link, i (i)}
 				<p>{link.target.package_name}</p>
@@ -79,7 +79,7 @@
 			<br />
 			<h4>Apple Apps</h4>
 			{#if data.entity.appleLinks?.length == 0}
-				<p><WarningAltFilled fill="orange" /> Keine Apple Apps verknüpft</p>
+				<p><WarningAltFilled fill="var(--bx-support-warning)" /> Keine Apple Apps verknüpft</p>
 			{/if}
 			{#each data.entity.appleLinks ?? [] as link, i (i)}
 				{#if link.appID}

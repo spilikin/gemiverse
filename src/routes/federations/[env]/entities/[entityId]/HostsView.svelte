@@ -101,11 +101,11 @@
 				<StructuredListCell>{ca(host)}</StructuredListCell>
 				<StructuredListCell>
 					{#if notAfterState(host) === 'error'}
-						<ErrorFilled fill="red" />
+						<ErrorFilled fill="var(--bx-support-error)" />
 					{:else if notAfterState(host) === 'warning'}
-						<WarningAltFilled fill="orange" />
+						<WarningAltFilled fill="var(--bx-support-warning)" />
 					{:else}
-						<CheckmarkFilled fill="green" />
+						<CheckmarkFilled fill="var(--bx-support-success)" />
 					{/if}
 					{notAfter(host)}
 				</StructuredListCell>

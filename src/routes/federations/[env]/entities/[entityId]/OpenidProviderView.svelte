@@ -10,6 +10,7 @@
 		CodeSnippet
 	} from 'carbon-components-svelte';
 	import HostsView from './HostsView.svelte';
+	import LogoImage from '$lib/LogoImage.svelte';
 
 	let { entity, op }: { entity: Entity; op: OpenidProvider } = $props();
 </script>
@@ -30,7 +31,7 @@
 		<StructuredListRow>
 			<StructuredListCell head>Logo</StructuredListCell>
 			<StructuredListCell>
-				<img src={op.logo_uri} alt="Logo" class="logo" />
+				<LogoImage src={op.logo_uri} />
 			</StructuredListCell>
 		</StructuredListRow>
 		<StructuredListRow>
@@ -76,11 +77,3 @@
 		</StructuredListRow>
 	</StructuredListBody>
 </StructuredList>
-
-<style>
-	.logo {
-		max-height: 64px;
-		max-width: 90px;
-		vertical-align: middle;
-	}
-</style>

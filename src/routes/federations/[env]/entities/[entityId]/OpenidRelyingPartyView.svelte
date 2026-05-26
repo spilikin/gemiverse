@@ -15,6 +15,7 @@
 	import CheckmarkFilled from 'carbon-icons-svelte/lib/CheckmarkFilled.svelte';
 
 	import HostsView from './HostsView.svelte';
+	import LogoImage from '$lib/LogoImage.svelte';
 
 	let { entity, rp }: { entity: Entity; rp: OpenidRelyingParty } = $props();
 
@@ -62,7 +63,7 @@
 		<StructuredListRow>
 			<StructuredListCell head>Logo</StructuredListCell>
 			<StructuredListCell>
-				<img src={rp.logo_uri} alt="Logo" class="logo" />
+				<LogoImage src={rp.logo_uri} />
 			</StructuredListCell>
 		</StructuredListRow>
 		{#each entity.jwksCertificates || [] as certs, keyNum (keyNum)}
@@ -75,11 +76,11 @@
 						<div>{certs[0].subject}</div>
 						<div>
 							{#if notAfterState(certs[0]) === 'error'}
-								<ErrorFilled color="red" />
+								<ErrorFilled fill="var(--bx-support-error)" />
 							{:else if notAfterState(certs[0]) === 'warning'}
-								<WarningAltFilled color="orange" />
+								<WarningAltFilled fill="var(--bx-support-warning)" />
 							{:else}
-								<CheckmarkFilled color="green" />
+								<CheckmarkFilled fill="var(--bx-support-success)" />
 							{/if}
 							{notAfter(certs[0])}
 						</div>
@@ -118,11 +119,3 @@
 		</StructuredListRow>
 	</StructuredListBody>
 </StructuredList>
-
-<style>
-	.logo {
-		max-height: 64px;
-		max-width: 90px;
-		vertical-align: middle;
-	}
-</style>
