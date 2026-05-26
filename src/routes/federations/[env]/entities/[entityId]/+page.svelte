@@ -73,7 +73,7 @@
 			{#if data.entity.androidLinks?.length == 0}
 				<p><WarningAltFilled fill="orange" /> Keine Android Apps verknüpft</p>
 			{/if}
-			{#each data.entity.androidLinks ?? [] as link (link.target.package_name)}
+			{#each data.entity.androidLinks ?? [] as link, i (i)}
 				<p>{link.target.package_name}</p>
 			{/each}
 			<br />
@@ -81,11 +81,11 @@
 			{#if data.entity.appleLinks?.length == 0}
 				<p><WarningAltFilled fill="orange" /> Keine Apple Apps verknüpft</p>
 			{/if}
-			{#each data.entity.appleLinks ?? [] as link, i (link.appID ?? i)}
+			{#each data.entity.appleLinks ?? [] as link, i (i)}
 				{#if link.appID}
 					<p>{link.appID}</p>
 				{/if}
-				{#each link.appIDs || [] as appID (appID)}
+				{#each link.appIDs || [] as appID, j (j)}
 					<p>{appID}</p>
 				{/each}
 			{/each}
