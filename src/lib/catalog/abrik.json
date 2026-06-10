@@ -1,0 +1,827 @@
+{
+  "source": "https://institut-ba.de/service/schluesselverzeichnisse/S_8a_ABRIK_012.PDF",
+  "version": "012",
+  "fetched_at": "2026-06-10T09:07:35Z",
+  "entries": {
+    "100167999": {
+      "name": "DAK-Gesundheit",
+      "kassensitz_ik": "101560000"
+    },
+    "100171007": {
+      "name": "Hanseatische Krankenkasse",
+      "kassensitz_ik": "101570104"
+    },
+    "100175502": {
+      "name": "Kaufmännische Krankenkasse - KKH",
+      "kassensitz_ik": "102171012"
+    },
+    "100177504": {
+      "name": "Techniker Krankenkasse",
+      "kassensitz_ik": "101575519"
+    },
+    "100180008": {
+      "name": "BARMER",
+      "kassensitz_ik": "104940005"
+    },
+    "100395611": {
+      "name": "AOK Nordost",
+      "kassensitz_ik": "100696012"
+    },
+    "100567993": {
+      "name": "DAK-Gesundheit",
+      "kassensitz_ik": "101560000"
+    },
+    "100571001": {
+      "name": "Hanseatische Krankenkasse",
+      "kassensitz_ik": "101570104"
+    },
+    "100575506": {
+      "name": "Kaufmännische Krankenkasse - KKH",
+      "kassensitz_ik": "102171012"
+    },
+    "100577508": {
+      "name": "Techniker Krankenkasse",
+      "kassensitz_ik": "101575519"
+    },
+    "100580002": {
+      "name": "BARMER",
+      "kassensitz_ik": "104940005"
+    },
+    "100602360": {
+      "name": "IKK Brandenburg und Berlin",
+      "kassensitz_ik": "100602360"
+    },
+    "100609049": {
+      "name": "LKK Mittel- und Ostdeutschland",
+      "kassensitz_ik": "100609049"
+    },
+    "100696012": {
+      "name": "AOK Nordost",
+      "kassensitz_ik": "100696012"
+    },
+    "100820488": {
+      "name": "Brandenburgische BKK",
+      "kassensitz_ik": "100820488"
+    },
+    "100967997": {
+      "name": "DAK-Gesundheit",
+      "kassensitz_ik": "101560000"
+    },
+    "100971005": {
+      "name": "Hanseatische Krankenkasse",
+      "kassensitz_ik": "101570104"
+    },
+    "100975500": {
+      "name": "Kaufmännische Krankenkasse - KKH",
+      "kassensitz_ik": "102171012"
+    },
+    "100977502": {
+      "name": "Techniker Krankenkasse",
+      "kassensitz_ik": "101575519"
+    },
+    "100980006": {
+      "name": "BARMER",
+      "kassensitz_ik": "104940005"
+    },
+    "101097008": {
+      "name": "AOK Sachsen-Anhalt",
+      "kassensitz_ik": "101097008"
+    },
+    "101202961": {
+      "name": "IKK gesund plus",
+      "kassensitz_ik": "101202961"
+    },
+    "101300129": {
+      "name": "IKK Nord",
+      "kassensitz_ik": "101300129"
+    },
+    "101308719": {
+      "name": "LKK Schleswig-Holstein und Hamburg",
+      "kassensitz_ik": "101308719"
+    },
+    "101317004": {
+      "name": "AOK NordWest",
+      "kassensitz_ik": "103411401"
+    },
+    "101367993": {
+      "name": "DAK-Gesundheit",
+      "kassensitz_ik": "101560000"
+    },
+    "101371001": {
+      "name": "Hanseatische Krankenkasse",
+      "kassensitz_ik": "101570104"
+    },
+    "101375506": {
+      "name": "Kaufmännische Krankenkasse - KKH",
+      "kassensitz_ik": "102171012"
+    },
+    "101377508": {
+      "name": "Techniker Krankenkasse",
+      "kassensitz_ik": "101575519"
+    },
+    "101380002": {
+      "name": "BARMER",
+      "kassensitz_ik": "104940005"
+    },
+    "101392255": {
+      "name": "SECURVITA BKK",
+      "kassensitz_ik": "101320032"
+    },
+    "101522116": {
+      "name": "Novitas BKK",
+      "kassensitz_ik": "104491707"
+    },
+    "101523446": {
+      "name": "Continentale BKK",
+      "kassensitz_ik": "103523440"
+    },
+    "101567995": {
+      "name": "DAK-Gesundheit",
+      "kassensitz_ik": "101560000"
+    },
+    "101571003": {
+      "name": "Hanseatische Krankenkasse",
+      "kassensitz_ik": "101570104"
+    },
+    "101575508": {
+      "name": "Kaufmännische Krankenkasse - KKH",
+      "kassensitz_ik": "102171012"
+    },
+    "101577500": {
+      "name": "Techniker Krankenkasse",
+      "kassensitz_ik": "101575519"
+    },
+    "101580004": {
+      "name": "BARMER",
+      "kassensitz_ik": "104940005"
+    },
+    "101767997": {
+      "name": "DAK-Gesundheit",
+      "kassensitz_ik": "101560000"
+    },
+    "101771005": {
+      "name": "Hanseatische Krankenkasse",
+      "kassensitz_ik": "101570104"
+    },
+    "101775500": {
+      "name": "Kaufmännische Krankenkasse - KKH",
+      "kassensitz_ik": "102171012"
+    },
+    "101777502": {
+      "name": "Techniker Krankenkasse",
+      "kassensitz_ik": "101575519"
+    },
+    "101780006": {
+      "name": "BARMER",
+      "kassensitz_ik": "104940005"
+    },
+    "101922757": {
+      "name": "BKK Salzgitter",
+      "kassensitz_ik": "101922757"
+    },
+    "101931440": {
+      "name": "BKK Public",
+      "kassensitz_ik": "101931440"
+    },
+    "102031410": {
+      "name": "BKK Technoform",
+      "kassensitz_ik": "102031410"
+    },
+    "102108731": {
+      "name": "LKK Niedersachsen-Bremen",
+      "kassensitz_ik": "102108731"
+    },
+    "102114819": {
+      "name": "AOK - Die Gesundheitskasse für Niedersachsen",
+      "kassensitz_ik": "102114819"
+    },
+    "102120076": {
+      "name": "BKK Mobil Oil",
+      "kassensitz_ik": "101520078"
+    },
+    "102122557": {
+      "name": "BKK exklusiv",
+      "kassensitz_ik": "102122557"
+    },
+    "102122660": {
+      "name": "BKK24",
+      "kassensitz_ik": "102122660"
+    },
+    "102129930": {
+      "name": "energie-BKK",
+      "kassensitz_ik": "102129930"
+    },
+    "102131240": {
+      "name": "BKK RWE",
+      "kassensitz_ik": "102131240"
+    },
+    "102137985": {
+      "name": "TUI BKK",
+      "kassensitz_ik": "102137985"
+    },
+    "102429648": {
+      "name": "BKK EWE",
+      "kassensitz_ik": "102429648"
+    },
+    "103067994": {
+      "name": "DAK-Gesundheit",
+      "kassensitz_ik": "101560000"
+    },
+    "103071002": {
+      "name": "Hanseatische Krankenkasse",
+      "kassensitz_ik": "101570104"
+    },
+    "103075507": {
+      "name": "Kaufmännische Krankenkasse - KKH",
+      "kassensitz_ik": "102171012"
+    },
+    "103077509": {
+      "name": "Techniker Krankenkasse",
+      "kassensitz_ik": "101575519"
+    },
+    "103080003": {
+      "name": "BARMER",
+      "kassensitz_ik": "104940005"
+    },
+    "103086806": {
+      "name": "hkk",
+      "kassensitz_ik": "103170002"
+    },
+    "103119199": {
+      "name": "AOK Bremen / Bremerhaven",
+      "kassensitz_ik": "103119199"
+    },
+    "103121013": {
+      "name": "atlas BKK ahlmann",
+      "kassensitz_ik": "103121013"
+    },
+    "103121137": {
+      "name": "BKK firmus",
+      "kassensitz_ik": "103121137"
+    },
+    "103411401": {
+      "name": "AOK NordWest",
+      "kassensitz_ik": "103411401"
+    },
+    "103467998": {
+      "name": "DAK-Gesundheit",
+      "kassensitz_ik": "101560000"
+    },
+    "103471006": {
+      "name": "Hanseatische Krankenkasse",
+      "kassensitz_ik": "101570104"
+    },
+    "103475501": {
+      "name": "Kaufmännische Krankenkasse - KKH",
+      "kassensitz_ik": "102171012"
+    },
+    "103477503": {
+      "name": "Techniker Krankenkasse",
+      "kassensitz_ik": "101575519"
+    },
+    "103480007": {
+      "name": "BARMER",
+      "kassensitz_ik": "104940005"
+    },
+    "103501080": {
+      "name": "BIG direkt gesund",
+      "kassensitz_ik": "103501080"
+    },
+    "103505006": {
+      "name": "Knappschaft",
+      "kassensitz_ik": "109905003"
+    },
+    "103524407": {
+      "name": "VIACTIV Krankenkasse",
+      "kassensitz_ik": "104526376"
+    },
+    "103525567": {
+      "name": "SIEMAG BKK",
+      "kassensitz_ik": "103525567"
+    },
+    "103525909": {
+      "name": "BKK Achenbach Buschhütten",
+      "kassensitz_ik": "103525909"
+    },
+    "103526615": {
+      "name": "BKK VDN",
+      "kassensitz_ik": "103526615"
+    },
+    "103708773": {
+      "name": "LKK Nordrhein-Westfalen",
+      "kassensitz_ik": "103708773"
+    },
+    "103724238": {
+      "name": "Heimat Krankenkasse",
+      "kassensitz_ik": "103724238"
+    },
+    "103724249": {
+      "name": "BKK DürkoppAdler",
+      "kassensitz_ik": "103724249"
+    },
+    "103724272": {
+      "name": "BKK Gildemeister Seidensticker",
+      "kassensitz_ik": "103724272"
+    },
+    "103724294": {
+      "name": "BKK Diakonie",
+      "kassensitz_ik": "103724294"
+    },
+    "103725342": {
+      "name": "Bertelsmann BKK",
+      "kassensitz_ik": "103725342"
+    },
+    "103725364": {
+      "name": "BKK Miele",
+      "kassensitz_ik": "103725364"
+    },
+    "103725547": {
+      "name": "BKK Herford Minden Ravensberg",
+      "kassensitz_ik": "103725547"
+    },
+    "103726081": {
+      "name": "BKK Melitta Plus",
+      "kassensitz_ik": "103726081"
+    },
+    "104067996": {
+      "name": "DAK-Gesundheit",
+      "kassensitz_ik": "101560000"
+    },
+    "104071004": {
+      "name": "Hanseatische Krankenkasse",
+      "kassensitz_ik": "101570104"
+    },
+    "104075509": {
+      "name": "Kaufmännische Krankenkasse - KKH",
+      "kassensitz_ik": "102171012"
+    },
+    "104077501": {
+      "name": "Techniker Krankenkasse",
+      "kassensitz_ik": "101575519"
+    },
+    "104080005": {
+      "name": "BARMER",
+      "kassensitz_ik": "104940005"
+    },
+    "104125509": {
+      "name": "BKK EUREGIO",
+      "kassensitz_ik": "104125509"
+    },
+    "104127692": {
+      "name": "actimonda BKK",
+      "kassensitz_ik": "104127692"
+    },
+    "104212505": {
+      "name": "AOK Rheinland/Hamburg",
+      "kassensitz_ik": "104212505"
+    },
+    "104224634": {
+      "name": "BKK Deutsche Bank AG",
+      "kassensitz_ik": "104224634"
+    },
+    "104424830": {
+      "name": "BKK GRILLO-WERKE AG",
+      "kassensitz_ik": "104424830"
+    },
+    "104626903": {
+      "name": "BKK BPW Bergische Achsen KG",
+      "kassensitz_ik": "104626903"
+    },
+    "104926702": {
+      "name": "DIE BERGISCHE KRANKENKASSE",
+      "kassensitz_ik": "104926702"
+    },
+    "105067999": {
+      "name": "DAK-Gesundheit",
+      "kassensitz_ik": "101560000"
+    },
+    "105071007": {
+      "name": "Hanseatische Krankenkasse",
+      "kassensitz_ik": "101570104"
+    },
+    "105075502": {
+      "name": "Kaufmännische Krankenkasse - KKH",
+      "kassensitz_ik": "102171012"
+    },
+    "105077504": {
+      "name": "Techniker Krankenkasse",
+      "kassensitz_ik": "101575519"
+    },
+    "105080008": {
+      "name": "BARMER",
+      "kassensitz_ik": "104940005"
+    },
+    "105167990": {
+      "name": "DAK-Gesundheit",
+      "kassensitz_ik": "101560000"
+    },
+    "105171008": {
+      "name": "Hanseatische Krankenkasse",
+      "kassensitz_ik": "101570104"
+    },
+    "105175503": {
+      "name": "Kaufmännische Krankenkasse - KKH",
+      "kassensitz_ik": "102171012"
+    },
+    "105177505": {
+      "name": "Techniker Krankenkasse",
+      "kassensitz_ik": "101575519"
+    },
+    "105180009": {
+      "name": "BARMER",
+      "kassensitz_ik": "104940005"
+    },
+    "105230076": {
+      "name": "Merck BKK",
+      "kassensitz_ik": "105230076"
+    },
+    "105313145": {
+      "name": "AOK - Die Gesundheitskasse in Hessen",
+      "kassensitz_ik": "105313145"
+    },
+    "105330168": {
+      "name": "Salus BKK",
+      "kassensitz_ik": "105330168"
+    },
+    "105330431": {
+      "name": "BKK KARL MAYER",
+      "kassensitz_ik": "105330431"
+    },
+    "105508787": {
+      "name": "LKK Hessen, Rheinland-Pfalz und Saarland",
+      "kassensitz_ik": "105508787"
+    },
+    "105508890": {
+      "name": "Krankenkasse für den Gartenbau",
+      "kassensitz_ik": "105508890"
+    },
+    "105530126": {
+      "name": "BKK Werra-Meissner",
+      "kassensitz_ik": "105530126"
+    },
+    "105530331": {
+      "name": "BKK Herkules",
+      "kassensitz_ik": "105530331"
+    },
+    "105530364": {
+      "name": "BKK HENSCHEL Plus",
+      "kassensitz_ik": "105530364"
+    },
+    "105530422": {
+      "name": "BKK B. Braun Melsungen AG",
+      "kassensitz_ik": "105530422"
+    },
+    "105723301": {
+      "name": "BKK PricewaterhouseCoopers",
+      "kassensitz_ik": "105723301"
+    },
+    "105732324": {
+      "name": "Ernst und Young BKK",
+      "kassensitz_ik": "105732324"
+    },
+    "105734543": {
+      "name": "BKK Wirtschaft und Finanzen",
+      "kassensitz_ik": "105734543"
+    },
+    "105823040": {
+      "name": "R+V BKK",
+      "kassensitz_ik": "105823040"
+    },
+    "105830517": {
+      "name": "BKK Linde",
+      "kassensitz_ik": "105830517"
+    },
+    "105928809": {
+      "name": "Thüringer BKK",
+      "kassensitz_ik": "105928809"
+    },
+    "105998018": {
+      "name": "AOK PLUS - Die Gesundheitskasse für Sachsen und Thüringen",
+      "kassensitz_ik": "107299005"
+    },
+    "106020600": {
+      "name": "BKK MEM",
+      "kassensitz_ik": "106020600"
+    },
+    "106229304": {
+      "name": "BKK advita",
+      "kassensitz_ik": "108029306"
+    },
+    "106267993": {
+      "name": "DAK-Gesundheit",
+      "kassensitz_ik": "101560000"
+    },
+    "106271001": {
+      "name": "Hanseatische Krankenkasse",
+      "kassensitz_ik": "101570104"
+    },
+    "106275506": {
+      "name": "Kaufmännische Krankenkasse - KKH",
+      "kassensitz_ik": "102171012"
+    },
+    "106277508": {
+      "name": "Techniker Krankenkasse",
+      "kassensitz_ik": "101575519"
+    },
+    "106280002": {
+      "name": "BARMER",
+      "kassensitz_ik": "104940005"
+    },
+    "106329225": {
+      "name": "Debeka BKK",
+      "kassensitz_ik": "106329225"
+    },
+    "106329566": {
+      "name": "BKK ZF und Partner",
+      "kassensitz_ik": "107829563"
+    },
+    "106331593": {
+      "name": "BKK EVM",
+      "kassensitz_ik": "106331593"
+    },
+    "106431572": {
+      "name": "BKK PFAFF",
+      "kassensitz_ik": "106431572"
+    },
+    "106431652": {
+      "name": "BKK Pfalz",
+      "kassensitz_ik": "106431652"
+    },
+    "106432038": {
+      "name": "BKK VITAL",
+      "kassensitz_ik": "106432038"
+    },
+    "106492393": {
+      "name": "pronova BKK",
+      "kassensitz_ik": "106492393"
+    },
+    "106767998": {
+      "name": "DAK-Gesundheit",
+      "kassensitz_ik": "101560000"
+    },
+    "106771006": {
+      "name": "Hanseatische Krankenkasse",
+      "kassensitz_ik": "101570104"
+    },
+    "106775501": {
+      "name": "Kaufmännische Krankenkasse - KKH",
+      "kassensitz_ik": "102171012"
+    },
+    "106777503": {
+      "name": "Techniker Krankenkasse",
+      "kassensitz_ik": "101575519"
+    },
+    "106780007": {
+      "name": "BARMER",
+      "kassensitz_ik": "104940005"
+    },
+    "106936311": {
+      "name": "Südzucker BKK",
+      "kassensitz_ik": "106936311"
+    },
+    "107036370": {
+      "name": "BKK Freudenberg",
+      "kassensitz_ik": "107036370"
+    },
+    "107202793": {
+      "name": "IKK classic",
+      "kassensitz_ik": "107202793"
+    },
+    "107267995": {
+      "name": "DAK-Gesundheit",
+      "kassensitz_ik": "101560000"
+    },
+    "107271003": {
+      "name": "Hanseatische Krankenkasse",
+      "kassensitz_ik": "101570104"
+    },
+    "107275508": {
+      "name": "Kaufmännische Krankenkasse - KKH",
+      "kassensitz_ik": "102171012"
+    },
+    "107277500": {
+      "name": "Techniker Krankenkasse",
+      "kassensitz_ik": "101575519"
+    },
+    "107280004": {
+      "name": "BARMER",
+      "kassensitz_ik": "104940005"
+    },
+    "107299005": {
+      "name": "AOK PLUS - Die Gesundheitskasse für Sachsen und Thüringen",
+      "kassensitz_ik": "107299005"
+    },
+    "107310373": {
+      "name": "AOK Rheinland-Pfalz/Saarland-Die Gesundheitskasse",
+      "kassensitz_ik": "107310373"
+    },
+    "107531187": {
+      "name": "BKK Schwarzwald-Baar-Heuberg",
+      "kassensitz_ik": "107531187"
+    },
+    "107532042": {
+      "name": "BKK Rieker.RICOSTER.Weisser",
+      "kassensitz_ik": "107532042"
+    },
+    "107536171": {
+      "name": "BKK Aesculap",
+      "kassensitz_ik": "107536171"
+    },
+    "107536262": {
+      "name": "Die Schwenninger BKK",
+      "kassensitz_ik": "107536262"
+    },
+    "107832012": {
+      "name": "BKK VerbundPlus",
+      "kassensitz_ik": "107832012"
+    },
+    "107835071": {
+      "name": "BKK Groz-Beckert",
+      "kassensitz_ik": "107835071"
+    },
+    "107835333": {
+      "name": "BKK MTU",
+      "kassensitz_ik": "107835333"
+    },
+    "107835743": {
+      "name": "Metzinger BKK",
+      "kassensitz_ik": "107835743"
+    },
+    "107836243": {
+      "name": "Wieland BKK",
+      "kassensitz_ik": "107836243"
+    },
+    "108008880": {
+      "name": "LKK Baden-Württemberg",
+      "kassensitz_ik": "108008880"
+    },
+    "108018121": {
+      "name": "AOK Baden-Württemberg",
+      "kassensitz_ik": "108018007"
+    },
+    "108030775": {
+      "name": "Daimler BKK",
+      "kassensitz_ik": "108030775"
+    },
+    "108031424": {
+      "name": "BKK Voralb HELLER*INDEX*LEUZE",
+      "kassensitz_ik": "108031424"
+    },
+    "108033244": {
+      "name": "Siemens-BKK(SBK)",
+      "kassensitz_ik": "108433248"
+    },
+    "108035576": {
+      "name": "BKK Scheufelen",
+      "kassensitz_ik": "108035576"
+    },
+    "108035612": {
+      "name": "mhplus BKK",
+      "kassensitz_ik": "108035612"
+    },
+    "108036123": {
+      "name": "Bosch BKK",
+      "kassensitz_ik": "108036123"
+    },
+    "108036145": {
+      "name": "BKK MAHLE",
+      "kassensitz_ik": "108036145"
+    },
+    "108036441": {
+      "name": "WMF BKK",
+      "kassensitz_ik": "108036441"
+    },
+    "108036577": {
+      "name": "BKK Würth",
+      "kassensitz_ik": "108036577"
+    },
+    "108310400": {
+      "name": "AOK Bayern",
+      "kassensitz_ik": "108310400"
+    },
+    "108367998": {
+      "name": "DAK-Gesundheit",
+      "kassensitz_ik": "101560000"
+    },
+    "108371006": {
+      "name": "Hanseatische Krankenkasse",
+      "kassensitz_ik": "101570104"
+    },
+    "108375501": {
+      "name": "Kaufmännische Krankenkasse - KKH",
+      "kassensitz_ik": "102171012"
+    },
+    "108377503": {
+      "name": "Techniker Krankenkasse",
+      "kassensitz_ik": "101575519"
+    },
+    "108380007": {
+      "name": "BARMER",
+      "kassensitz_ik": "104940005"
+    },
+    "108534160": {
+      "name": "Audi BKK",
+      "kassensitz_ik": "108534160"
+    },
+    "108591499": {
+      "name": "BKK ProVita",
+      "kassensitz_ik": "108591499"
+    },
+    "108609148": {
+      "name": "LKK Franken und Oberbayern",
+      "kassensitz_ik": "108608820"
+    },
+    "108632900": {
+      "name": "BKK Textilgruppe Hof",
+      "kassensitz_ik": "108632900"
+    },
+    "108833355": {
+      "name": "BKK Akzo Nobel Bayern",
+      "kassensitz_ik": "108833355"
+    },
+    "108833505": {
+      "name": "SKD BKK",
+      "kassensitz_ik": "108833505"
+    },
+    "108833674": {
+      "name": "BKK KBA",
+      "kassensitz_ik": "108833674"
+    },
+    "108934142": {
+      "name": "Krones BKK",
+      "kassensitz_ik": "108934142"
+    },
+    "109008837": {
+      "name": "LKK Niederbayern, Oberpfalz und Schwaben",
+      "kassensitz_ik": "109008837"
+    },
+    "109033393": {
+      "name": "BKK Faber-Castell und Partner",
+      "kassensitz_ik": "109033393"
+    },
+    "109034270": {
+      "name": "BMW BKK",
+      "kassensitz_ik": "109034270"
+    },
+    "109132678": {
+      "name": "BKK STADT AUGSBURG",
+      "kassensitz_ik": "109132678"
+    },
+    "109303301": {
+      "name": "IKK Südwest",
+      "kassensitz_ik": "109303301"
+    },
+    "109367990": {
+      "name": "DAK-Gesundheit",
+      "kassensitz_ik": "101560000"
+    },
+    "109371008": {
+      "name": "Hanseatische Krankenkasse",
+      "kassensitz_ik": "101570104"
+    },
+    "109375503": {
+      "name": "Kaufmännische Krankenkasse - KKH",
+      "kassensitz_ik": "102171012"
+    },
+    "109377505": {
+      "name": "Techniker Krankenkasse",
+      "kassensitz_ik": "101575519"
+    },
+    "109380009": {
+      "name": "BARMER",
+      "kassensitz_ik": "104940005"
+    },
+    "109519005": {
+      "name": "AOK Nordost",
+      "kassensitz_ik": "100696012"
+    },
+    "109567992": {
+      "name": "DAK-Gesundheit",
+      "kassensitz_ik": "101560000"
+    },
+    "109571000": {
+      "name": "Hanseatische Krankenkasse",
+      "kassensitz_ik": "101570104"
+    },
+    "109575505": {
+      "name": "Kaufmännische Krankenkasse - KKH",
+      "kassensitz_ik": "102171012"
+    },
+    "109577507": {
+      "name": "Techniker Krankenkasse",
+      "kassensitz_ik": "101575519"
+    },
+    "109580001": {
+      "name": "BARMER",
+      "kassensitz_ik": "104940005"
+    },
+    "109723913": {
+      "name": "BKK Verkehrsbau Union (VBU)",
+      "kassensitz_ik": "109723913"
+    },
+    "109938503": {
+      "name": "BAHN-BKK",
+      "kassensitz_ik": "109938503"
+    }
+  }
+}
