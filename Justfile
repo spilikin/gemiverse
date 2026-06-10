@@ -11,6 +11,10 @@ version:
 	@echo "export const AppVersion = \"${VERSION}\";" > src/lib/version.ts
 	@echo "export const BuildDate = \"$(date +"%Y-%m-%d %H:%M")\";" >> src/lib/version.ts
 
+# Refresh src/lib/catalog/abrik.json from the ARGE.IK PDF
+fetch-abrik:
+	uv run scripts/fetch_abrik.py --refresh
+
 # Build docker image
 dockerbuild: version
 	npm update

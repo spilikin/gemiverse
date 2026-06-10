@@ -10,3 +10,4 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 caddy_data
 caddy_config
+/scripts/.cache/

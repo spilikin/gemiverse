@@ -92,6 +92,20 @@
 				>Produktiv</SideNavMenuItem
 			>
 		</SideNavMenu>
+		<SideNavMenu text="Catalog" expanded={true}>
+			<SideNavMenuItem href="/catalog/dev" isSelected={isSelected('/catalog/dev')}
+				>Dev</SideNavMenuItem
+			>
+			<SideNavMenuItem href="/catalog/test" isSelected={isSelected('/catalog/test')}
+				>Test</SideNavMenuItem
+			>
+			<SideNavMenuItem href="/catalog/ref" isSelected={isSelected('/catalog/ref')}
+				>Referenz</SideNavMenuItem
+			>
+			<SideNavMenuItem href="/catalog/prod" isSelected={isSelected('/catalog/prod')}
+				>Produktiv</SideNavMenuItem
+			>
+		</SideNavMenu>
 	</SideNavItems>
 </SideNav>
 
@@ -105,6 +119,25 @@
 	   Carbon's theme token so the line themes correctly in dark mode too. */
 	:global(.bx--tabs) {
 		box-shadow: inset 0 -1px 0 var(--bx-border-subtle);
+	}
+
+	/* Carbon's reset zeroes default heading margins, so a bare `<h4>` subtitle
+	   ends up flush against an adjacent Tabs row. Restore breathing room. */
+	:global(h2 + h4) {
+		margin-top: 0.25rem;
+	}
+	:global(h4 + .bx--tabs) {
+		margin-top: 1.5rem;
+	}
+
+	/* In Carbon 1.0.0-next.1 the anchor-style tab link is a plain <a> with no
+	   vertical centering — the label hugs the top of the tab row while the
+	   selected-tab underline sits at the bottom, leaving an awkward gap.
+	   Flex-center the label against a canonical 2.5rem tab-bar height. */
+	:global(.bx--tabs__nav-link) {
+		display: inline-flex;
+		align-items: center;
+		min-height: 2.5rem;
 	}
 
 	/* Carbon 1.0-next.1's HeaderAction button no longer carries the bx--btn class,

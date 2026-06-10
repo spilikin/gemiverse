@@ -34,7 +34,7 @@
 	<StructuredListBody>
 		{#each entities as entity (entity.iss)}
 			{#if entity.error}
-				<StructuredListRow>
+				<StructuredListRow class="row-not-allowed">
 					<StructuredListCell>
 						<Tag type="red">Error</Tag>
 					</StructuredListCell>
@@ -79,6 +79,14 @@
 <style>
 	:global(.logoCell) {
 		width: 95px;
+	}
+
+	/* Carbon's `selection` StructuredList sets cursor: pointer on every row.
+	   Override for rows we render without an on:click handler (error rows) so
+	   the cursor reflects that they aren't navigable. */
+	:global(.row-not-allowed),
+	:global(.row-not-allowed *) {
+		cursor: not-allowed;
 	}
 
 	.cidi {
