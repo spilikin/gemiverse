@@ -1,53 +1,29 @@
 import type { PageLoad } from './$types';
-import type {
-	Catalog,
-	ServiceId,
-	ServiceInstance,
-	ServiceType,
-	Identifier
-} from '$lib/catalog/catalog';
+import type { Catalog, Identifier } from '$lib/catalog/catalog';
+import abrik from '$lib/catalog/abrik.json';
 
-export type InstanceRow = {
-	serviceId: ServiceId;
-	type: ServiceType;
-	url: string;
-};
-
-export type RoutingRow = {
+export type VsdmRow = {
 	identifier: Identifier;
-	serviceId: ServiceId;
-	instance: ServiceInstance | null;
-};
-
-export type RoutingGroup = {
-	serviceType: ServiceType;
-	rows: RoutingRow[];
+	name: string | null;
+	fachdienst: string | null;
 };
 
 export const load: PageLoad = async ({ fetch, params }) => {
 	const catalog: Catalog = await fetch(`/api/catalog/${params.env}`).then((res) => res.json());
 
-	const instances: InstanceRow[] = Object.entries(catalog.service_instances)
-		.map(([serviceId, instance]) => ({ serviceId, type: instance.type, url: instance.url }))
-		.sort((a, b) => a.type.localeCompare(b.type) || a.serviceId.localeCompare(b.serviceId));
-
-	const routingByType: RoutingGroup[] = Object.entries(catalog.routing)
-		.map(([serviceType, table]) => ({
-			serviceType,
-			rows: Object.entries(table)
-				.map(([identifier, serviceId]) => ({
-					identifier,
-					serviceId,
-					instance: catalog.service_instances[serviceId] ?? null
-				}))
-				.sort((a, b) => a.identifier.localeCompare(b.identifier))
+	const labels = abrik.entries as Record<string, { name: string }>;
+	const vsdmRouting = catalog.routing.vsdm ?? {};
+	const vsdmRows: VsdmRow[] = Object.entries(vsdmRouting)
+		.map(([identifier, serviceId]) => ({
+			identifier,
+			name: labels[identifier]?.name ?? null,
+			fachdienst: catalog.service_instances[serviceId]?.url ?? null
 		}))
-		.sort((a, b) => a.serviceType.localeCompare(b.serviceType));
+		.sort((a, b) => a.identifier.localeCompare(b.identifier));
 
 	return {
 		env: params.env,
 		catalog,
-		instances,
-		routingByType
+		vsdmRows
 	};
 };

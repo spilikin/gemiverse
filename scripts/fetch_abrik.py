@@ -68,33 +68,33 @@ def extract_lines() -> list[str]:
     return lines
 
 
-def parse_rows(lines: list[str]) -> dict[str, dict[str, str]]:
-    entries: dict[str, dict[str, str]] = {}
-    current_key: str | None = None
-    name = ""
+def parse_rows(lines: list[str]) -> list[tuple[str, str, str]]:
+    """Return [(abrechnungs_ik, kassensitz_ik, name), ...] from the PDF text."""
+    rows: list[tuple[str, str, str]] = []
+    current: list[str] | None = None  # [abrechnungs_ik, kassensitz_ik, name_so_far]
     join_without_space = False
 
     def add_chunk(chunk: str) -> None:
-        nonlocal name, join_without_space
+        nonlocal join_without_space
+        assert current is not None
         ends_with_wrap = chunk.endswith(SOFT_HYPHEN)
         cleaned = chunk[:-1].rstrip() if ends_with_wrap else chunk.rstrip()
-        if join_without_space or not name:
-            name += cleaned
+        if join_without_space or not current[2]:
+            current[2] += cleaned
         else:
-            name += " " + cleaned
+            current[2] += " " + cleaned
         join_without_space = ends_with_wrap
 
     def flush() -> None:
-        nonlocal current_key, name, join_without_space
-        if current_key is None:
+        nonlocal current, join_without_space
+        if current is None:
             return
-        clean = MULTI_SPACE_RE.sub(" ", name).strip()
+        clean = MULTI_SPACE_RE.sub(" ", current[2]).strip()
         # Remaining inline U+2010 chars are visible word-separators (e.g. "AOK ‐ Die …");
         # normalise to ASCII hyphen for readability.
         clean = clean.replace(SOFT_HYPHEN, "-")
-        entries[current_key]["name"] = clean
-        current_key = None
-        name = ""
+        rows.append((current[0], current[1], clean))
+        current = None
         join_without_space = False
 
     for raw in lines:
@@ -105,12 +105,33 @@ def parse_rows(lines: list[str]) -> dict[str, dict[str, str]]:
         if m:
             flush()
             abrechnungs_ik, kassensitz_ik, name_chunk = m.groups()
-            current_key = abrechnungs_ik
-            entries[current_key] = {"name": "", "kassensitz_ik": kassensitz_ik}
+            current = [abrechnungs_ik, kassensitz_ik, ""]
             add_chunk(name_chunk)
-        elif current_key is not None:
+        elif current is not None:
             add_chunk(stripped)
     flush()
+    return rows
+
+
+def build_entries(rows: list[tuple[str, str, str]]) -> dict[str, dict[str, str]]:
+    """Map any IK (Abrechnungs- or Kassensitz-) → {name}.
+
+    The PDF lists each Krankenkasse's regional Abrechnungs-IKs against a
+    shared Kassensitz-IK (head-office IK). The catalog routing uses the
+    Kassensitz-IK as the routing key, so we index both so any IK in the
+    routing resolves to a name.
+    """
+    entries: dict[str, dict[str, str]] = {}
+    conflicts: list[tuple[str, str, str]] = []
+    for abrechnungs_ik, kassensitz_ik, name in rows:
+        for ik in (abrechnungs_ik, kassensitz_ik):
+            prev = entries.get(ik)
+            if prev and prev["name"] != name:
+                conflicts.append((ik, prev["name"], name))
+                continue
+            entries[ik] = {"name": name}
+    for ik, old, new in conflicts:
+        print(f"warning: conflicting names for {ik}: {old!r} vs {new!r}", file=sys.stderr)
     return entries
 
 
@@ -121,7 +142,8 @@ def main() -> int:
 
     download_pdf(args.refresh)
     lines = extract_lines()
-    entries = parse_rows(lines)
+    rows = parse_rows(lines)
+    entries = build_entries(rows)
 
     if len(entries) < 100:
         print(f"error: parsed only {len(entries)} rows, expected >= 100", file=sys.stderr)

@@ -11,8 +11,7 @@
 		Loading
 	} from 'carbon-components-svelte';
 	import RawDataView from '../../RawDataView.svelte';
-	import InstanceListView from './InstanceListView.svelte';
-	import RoutingView from './RoutingView.svelte';
+	import VsdmView from './VsdmView.svelte';
 	import { onMount } from 'svelte';
 
 	let { data }: { data: PageData } = $props();
@@ -62,12 +61,10 @@
 <h4>{updatedAt}</h4>
 
 <Tabs class="tabs">
-	<Tab label="Instances" href="#instances" on:click={tabClick} />
-	<Tab label="Routing" href="#routing" on:click={tabClick} />
+	<Tab label="VSDM" href="#vsdm" on:click={tabClick} />
 	<Tab label="Rohdaten" href="#raw" on:click={tabClick} />
 	<svelte:fragment slot="content">
-		<TabContent><InstanceListView instances={data.instances} /></TabContent>
-		<TabContent><RoutingView groups={data.routingByType} /></TabContent>
+		<TabContent><VsdmView rows={data.vsdmRows} /></TabContent>
 		<TabContent><RawDataView content={data.catalog} /></TabContent>
 	</svelte:fragment>
 </Tabs>
