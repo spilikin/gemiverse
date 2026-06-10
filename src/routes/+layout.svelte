@@ -92,6 +92,20 @@
 				>Produktiv</SideNavMenuItem
 			>
 		</SideNavMenu>
+		<SideNavMenu text="Catalog" expanded={true}>
+			<SideNavMenuItem href="/catalog/dev" isSelected={isSelected('/catalog/dev')}
+				>Dev</SideNavMenuItem
+			>
+			<SideNavMenuItem href="/catalog/test" isSelected={isSelected('/catalog/test')}
+				>Test</SideNavMenuItem
+			>
+			<SideNavMenuItem href="/catalog/ref" isSelected={isSelected('/catalog/ref')}
+				>Referenz</SideNavMenuItem
+			>
+			<SideNavMenuItem href="/catalog/prod" isSelected={isSelected('/catalog/prod')}
+				>Produktiv</SideNavMenuItem
+			>
+		</SideNavMenu>
 	</SideNavItems>
 </SideNav>
 

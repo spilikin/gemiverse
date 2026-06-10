@@ -3,7 +3,7 @@ import Valkey from 'iovalkey';
 // Create a new Redis instance with url from REDIST_URL environment variable
 let _valkey: Valkey | null = null;
 
-function openValkey() {
+export function openValkey() {
 	if (_valkey) {
 		return _valkey;
 	}

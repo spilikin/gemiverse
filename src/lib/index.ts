@@ -1,5 +1,7 @@
 export function getEnvLabel(env: string) {
 	switch (env) {
+		case 'dev':
+			return 'Dev';
 		case 'test':
 			return 'Test';
 		case 'ref':

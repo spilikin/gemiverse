@@ -23,5 +23,19 @@ export default {
 			url: 'https://download.tsl.ti-dienste.de/ECC/ECC-RSA_TSL.xml',
 			qesUrl: 'https://tl.bundesnetzagentur.de/TL-DE.XML'
 		}
+	},
+	catalog: {
+		dev: {
+			url: 'https://service-discovery.dev.ti-platform.de/catalog.json'
+		},
+		ref: {
+			url: 'https://service-discovery.ref.ti-platform.de/catalog.json'
+		},
+		test: {
+			url: 'https://service-discovery.test.ti-platform.de/catalog.json'
+		},
+		prod: {
+			url: 'https://service-discovery.prod.ti-platform.de/catalog.json'
+		}
 	}
 };
