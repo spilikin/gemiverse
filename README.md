@@ -29,7 +29,8 @@ edit it, update it from a zero-lab checkout next to this one:
 just wasm-vendor   # in zero-lab/rust
 ```
 
-`vendor/ti-wasm/VERSION.json` names the commit it was built from. The server loads the module at
+`vendor/ti-wasm/VERSION.json` names the commit it was built from; `just vendor-check` verifies the
+module against it. The server loads the module at
 run time from `vendor/ti-wasm` (`TI_WASM_DIR` to override) in a worker thread.
 
 ## Build and deploy

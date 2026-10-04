@@ -1,4 +1,4 @@
-import { getTslQes } from '$lib/tsl/tsl.server';
+import { getTslQes } from '$lib/tsl/tsl_qes.server';
 import { error, json } from '@sveltejs/kit';
 
 export async function GET(event) {

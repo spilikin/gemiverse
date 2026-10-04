@@ -1,4 +1,4 @@
-import { type ITrustServiceStatusList } from './tsl';
+import { type ITrustServiceStatusList } from './tsl_qes';
 import { loadObjectFromCache } from '../cache.server';
 import { JSDOM } from 'jsdom';
 import Atlas from '../atlas';
@@ -8,39 +8,12 @@ import {
 	parseCertificateFromBase64,
 	encodeCertificateToPEM
 } from '../x509.server';
-import type { MultiLangString, MultiLangURI } from './tsl';
+import type { MultiLangString, MultiLangURI } from './tsl_qes';
 export type { MultiLangString, MultiLangURI };
 
+// The BNetzA trusted list (QES), parsed with JSDOM and not verified: the TI TSL itself is
+// verified by ti-wasm (tsl_verified.server.ts), this one is shown as published.
 export const NS_ETSI_02231_V2 = 'http://uri.etsi.org/02231/v2#';
-
-export async function getTsl(
-	env: string,
-	forceFetch: boolean = false
-): Promise<ITrustServiceStatusList | null> {
-	const key = `tsl:${env}`;
-
-	return await loadObjectFromCache<ITrustServiceStatusList>(
-		key,
-		forceFetch,
-		async () => {
-			return await fetchTsl(env);
-		},
-		30 * 60
-	);
-}
-
-export async function fetchTsl(env: string): Promise<ITrustServiceStatusList | null> {
-	if (!Atlas.tsl[env as keyof typeof Atlas.tsl]) {
-		return null;
-	}
-
-	const url = Atlas.tsl[env as keyof typeof Atlas.tsl].url;
-	return fetch(url)
-		.then((response) => response.text())
-		.then((xml) => {
-			return parseTrustServiceStatusList(xml);
-		});
-}
 
 export async function getTslQes(
 	env: string,

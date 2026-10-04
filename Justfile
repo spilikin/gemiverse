@@ -15,8 +15,20 @@ version:
 fetch-abrik:
 	uv run scripts/fetch_abrik.py --refresh
 
+# Show the vendored ti-wasm build and verify the module against its VERSION.json
+vendor-check:
+	#!/usr/bin/env bash
+	set -euo pipefail
+	v=vendor/ti-wasm/VERSION.json
+	cat "$v"
+	want=$(sed -n 's/.*"wasm_sha256": "\(.*\)".*/\1/p' "$v")
+	have=$(shasum -a 256 vendor/ti-wasm/ti_wasm_bg.wasm | awk '{print $1}')
+	[[ "$want" == "$have" ]] || { echo "vendor-check: ti_wasm_bg.wasm is $have, VERSION.json says $want" >&2; exit 1; }
+	grep -q '"dirty": false' "$v" || { echo "vendor-check: built from a dirty zero-lab tree" >&2; exit 1; }
+	echo "vendor-check: ok"
+
 # Build docker image
-dockerbuild: version
+dockerbuild: version vendor-check
 	npm update
 	docker buildx build --no-cache --platform linux/amd64 -t {{DOCKER_IMAGE}} .
 	docker tag {{DOCKER_IMAGE}} {{DOCKER_IMAGE}}:{{VERSION}}

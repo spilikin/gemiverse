@@ -100,8 +100,9 @@ To add a tab: add the builder to `tsl_api.server.ts` and the type to `tsl_api.ts
 `src/routes/api/tsl/[env]/{tab}/+server.ts`, the screen `src/routes/tsl/[env]/{tab}/` with a
 `+page.ts` that calls `getResource`, and an entry in the layout's `tabs`.
 
-`/api/tsl/{env}/qes` (BNetzA list) still uses the old JSDOM parser in `src/lib/tsl/tsl.server.ts`;
-it is not part of the verified screens.
+`/api/tsl/{env}/qes` (BNetzA list) is the one TSL path not verified by ti-wasm: it is parsed
+with JSDOM in `src/lib/tsl/tsl_qes.server.ts` (types in `tsl_qes.ts`) and served as published.
+Do not use that parser for the TI TSL.
 
 ## UI rules
 
@@ -134,7 +135,9 @@ just wasm-vendor            # build, Node smoke test, size budget, then rsync in
 `wasm-vendor` refuses a dirty zero-lab tree or a build without `wasm-opt` (binaryen).
 `vendor/ti-wasm/VERSION.json` names the zero-lab commit, the tool versions and the module's
 SHA-256; the Signature tab shows the version and commit that verified the list. After vendoring,
-check `npm run check` (the generated types may have changed) and look at all three environments.
+run `just vendor-check` (the module's SHA-256 against `VERSION.json`, clean build), `npm run check`
+(the generated types may have changed), and look at all three environments. `just dockerbuild`
+runs `vendor-check` first.
 
 The Dockerfile copies `vendor/ti-wasm` into the runtime image; the server loads it from
 `vendor/ti-wasm` relative to the working directory, or from `TI_WASM_DIR`.
