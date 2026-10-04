@@ -1,9 +1,9 @@
 {
   "ti_wasm": "0.1.0",
-  "commit": "1c74977868f655cf50b9588403d68129b5ea7631",
+  "commit": "3d1bafce4960801ba5f11d95fe27402e3d280df2",
   "dirty": false,
   "rustc": "1.98.1",
   "wasm_bindgen": "0.2.128",
   "wasm_opt": "133",
-  "wasm_sha256": "f9cb5eea08f55e1279a6865220422a8ebb9e077ff2adcbdc6237d9b442ca7717"
+  "wasm_sha256": "26aae60ad929a5c7e006fa9b077f12c0afa1f7b8b3c941f32c94c568da5864a3"
 }
