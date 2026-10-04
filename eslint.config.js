@@ -35,6 +35,7 @@ export default ts.config(
 			'node_modules/',
 			'build/',
 			'.svelte-kit/',
+			'vendor/',
 			'package/',
 			'.env',
 			'.env.*',

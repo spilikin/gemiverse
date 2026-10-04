@@ -17,6 +17,21 @@ npm run dev
 npm run dev -- --open
 ```
 
+## TSL verification (ti-wasm)
+
+`/api/tsl/[env]/verified`, `/api/tsl/[env]/certificates/[fingerprint]` and `/api/tsl/[env]/xml`
+verify the TSL with the ti-wasm module in `vendor/ti-wasm`: signature, signer, roots and the chain
+of every service certificate. The module is built in
+[zero-lab](https://github.com/gematik/zero-lab/tree/main/rust/ti-wasm) and committed here; do not
+edit it, update it from a zero-lab checkout next to this one:
+
+```bash
+just wasm-vendor   # in zero-lab/rust
+```
+
+`vendor/ti-wasm/VERSION.json` names the commit it was built from. The server loads the module at
+run time from `vendor/ti-wasm` (`TI_WASM_DIR` to override) in a worker thread.
+
 ## Build and deploy
 
 To create a production version of your app:

@@ -34,6 +34,8 @@ ENV PORT=3000
 COPY --from=build /app/build        ./build
 COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/package.json ./
+# ti-wasm is loaded at run time from here (TI_WASM_DIR), not bundled by Vite.
+COPY --from=build /app/vendor/ti-wasm ./vendor/ti-wasm
 
 EXPOSE 3000
 CMD ["node", "build/index.js"]
