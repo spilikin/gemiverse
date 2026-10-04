@@ -25,6 +25,7 @@ docker-compose-*.yaml
 
 # Docs
 README.md
+AGENTS.md
 
 # Reverse-proxy persistent state (kept out of the image)
 caddy_data

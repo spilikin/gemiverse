@@ -2,7 +2,8 @@ import { createHash } from 'node:crypto';
 import Atlas from '../atlas';
 import { fetchBytesConditional } from '../http_cache.server';
 import { trustUrls, verifyTsl, wasmVersion } from '../ti/ti_wasm.server';
-import type { CertificateInfo, Fingerprint, TrustUrls, TslView } from '$ti-wasm/types';
+import type { TrustUrls, TslView } from '$ti-wasm/types';
+import type { Source } from './tsl_api';
 
 /** How long past NextUpdate a list is still shown as valid, with validity_warning_1. */
 const GRACE_SECONDS = 7 * 24 * 3600;
@@ -12,14 +13,6 @@ const VIEW_TTL_MS = 10 * 60 * 1000;
 const DOWNLOAD_MAX_AGE = 30 * 60;
 
 export class DownloadError extends Error {}
-
-export type Source = {
-	url: string;
-	fetched_at: string | null;
-	/** The upstream failed; the cached copy was used. */
-	stale: boolean;
-	sha256: string;
-};
 
 export type VerifiedTsl = {
 	view: TslView;
@@ -114,82 +107,4 @@ export async function getVerifiedTsl(env: keyof typeof Atlas.tsl): Promise<Verif
 		if (views.get(env)?.result === result) views.delete(env);
 	});
 	return result;
-}
-
-export type CertificateSummary = Pick<
-	CertificateInfo,
-	| 'subject'
-	| 'issuer'
-	| 'serial'
-	| 'not_before'
-	| 'not_after'
-	| 'validity'
-	| 'key'
-	| 'certificate_type'
-	| 'ca'
->;
-
-export function summarize(info: CertificateInfo): CertificateSummary {
-	const { subject, issuer, serial, not_before, not_after, validity, key, certificate_type, ca } =
-		info;
-	return { subject, issuer, serial, not_before, not_after, validity, key, certificate_type, ca };
-}
-
-/** Where a certificate occurs in the view. */
-export type CertificateRole =
-	| { role: 'tsl_signer' }
-	| { role: 'tsl_signer_ca' }
-	| { role: 'root' }
-	| {
-			role: 'service';
-			provider: string;
-			service: TslView['providers'][number]['services'][number];
-	  };
-
-export type CertificateDetail = {
-	fingerprint: Fingerprint;
-	certificate: CertificateInfo;
-	roles: CertificateRole[];
-	/** From this certificate up to a verified root, or as far as it was built. */
-	chain: { fingerprint: Fingerprint; certificate: CertificateSummary }[];
-	trusted: boolean;
-	rejection: string | null;
-};
-
-/** Everything the view knows about the certificate `fp`; null if it names none. */
-export function certificateDetail(view: TslView, fp: Fingerprint): CertificateDetail | null {
-	const certificate = view.certificates[fp];
-	if (!certificate) return null;
-
-	const roles: CertificateRole[] = [];
-	if (view.signature?.signer === fp) roles.push({ role: 'tsl_signer' });
-	if (view.signature?.tsl_signer_ca === fp) roles.push({ role: 'tsl_signer_ca' });
-	const isRoot = view.roots?.trusted.some((r) => r.fingerprint === fp) ?? false;
-	if (isRoot) roles.push({ role: 'root' });
-	for (const provider of view.providers) {
-		for (const service of provider.services) {
-			if (service.certificate === fp) {
-				roles.push({ role: 'service', provider: provider.name, service });
-			}
-		}
-	}
-
-	const withChain = roles.find(
-		(r): r is Extract<CertificateRole, { role: 'service' }> =>
-			r.role === 'service' && r.service.chain !== null
-	)?.service.chain;
-	// The TSL signer chains to the embedded TSL signer CA, not to a root; the view only
-	// names both once the signature verified.
-	const signature = view.signature;
-	const signerPath = signature?.signer === fp ? [fp, signature.tsl_signer_ca] : null;
-	const path = withChain?.path ?? signerPath ?? [fp];
-	const anchored = isRoot || signature?.tsl_signer_ca === fp || signerPath !== null;
-	return {
-		fingerprint: fp,
-		certificate,
-		roles,
-		chain: path.map((p) => ({ fingerprint: p, certificate: summarize(view.certificates[p]) })),
-		trusted: withChain ? withChain.trusted : anchored,
-		rejection: withChain?.rejection ?? null
-	};
 }

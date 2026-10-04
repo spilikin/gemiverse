@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { type HostInfo, parseDistinguishedName } from '$lib/federations/federations';
+	import { type ExpiryState, expiryState } from '$lib/x509';
 
 	import {
 		StructuredList,
@@ -34,18 +35,9 @@
 		}
 	}
 
-	function notAfterState(host: HostInfo): 'error' | 'warning' | 'success' {
+	function notAfterState(host: HostInfo): ExpiryState {
 		if (host.certificates && host.certificates.length > 0) {
-			const notAfter = new Date(host.certificates[0].notAfter);
-			const now = new Date();
-			const diff = notAfter.getTime() - now.getTime();
-			if (diff < 1000 * 60 * 60 * 24 * 7) {
-				return 'error';
-			} else if (diff < 1000 * 60 * 60 * 24 * 30) {
-				return 'warning';
-			} else {
-				return 'success';
-			}
+			return expiryState(host.certificates[0].notAfter);
 		} else {
 			return 'error';
 		}

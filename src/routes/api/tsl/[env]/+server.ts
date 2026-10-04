@@ -1,18 +1,11 @@
-import { getTsl } from '$lib/tsl/tsl.server';
-import { error, json } from '@sveltejs/kit';
+import { loadTsl, summary } from '$lib/tsl/tsl_api.server';
+import type { Environment } from '$lib/tsl/tsl_api';
+import { json } from '@sveltejs/kit';
 
-export async function GET(event) {
-	const env = event.params.env;
-	const tsl = await getTsl(env)
-		.then((tsl) => {
-			return tsl;
-		})
-		.catch((err) => {
-			console.error('error fetching TSL for', env, err);
-			return error(500, 'Error fetching TSL');
-		});
-	if (!tsl) {
-		return error(404, 'TSL not found');
-	}
-	return json(tsl);
+/** The verdict of the environment's TSL; an invalid list is a 200 with result "invalid". */
+export async function GET({ params }) {
+	const verified = await loadTsl(params.env);
+	return json(summary(params.env as Environment, verified.view), {
+		headers: { 'Cache-Control': 'public, max-age=60' }
+	});
 }
