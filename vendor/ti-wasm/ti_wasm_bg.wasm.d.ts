@@ -1,8 +1,12 @@
 /* tslint:disable */
 /* eslint-disable */
 export const memory: WebAssembly.Memory;
+export const __wbg_trustcontext_free: (a: number, b: number) => void;
 export const describe_certificate: (a: number, b: number, c: number, d: number, e: number) => void;
 export const trust_urls: (a: number, b: number, c: number) => void;
+export const trustcontext_check: (a: number, b: number, c: number, d: number, e: number, f: number) => void;
+export const trustcontext_new: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number, j: number) => void;
+export const trustcontext_tsl: (a: number, b: number) => void;
 export const verify_tsl: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number, j: number) => void;
 export const version: (a: number) => void;
 export const __wbindgen_add_to_stack_pointer: (a: number) => number;

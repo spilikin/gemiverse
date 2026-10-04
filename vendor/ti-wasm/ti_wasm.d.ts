@@ -2,6 +2,38 @@
 /* eslint-disable */
 
 /**
+ * One environment's TSL and roots, verified once, to check any number of certificates
+ * against (`schemas/check.json`). An invalid list is not an error: every check against
+ * it reports it.
+ */
+export class TrustContext {
+    free(): void;
+    [Symbol.dispose](): void;
+    /**
+     * The report on `input` (PEM with the end entity first and any intermediates after
+     * it, or one DER certificate) at `now` (RFC 3339).
+     *
+     * # Errors
+     *
+     * A bad time, or no certificate in `input`.
+     */
+    check(input: Uint8Array, now: string): string;
+    /**
+     * Verifies `xml` as the TSL of `env` at `now` (RFC 3339), with `roots_json` as
+     * fresher roots if given and `grace_seconds` past `NextUpdate` tolerated.
+     *
+     * # Errors
+     *
+     * An unknown environment, a bad time or a grace period over 30 days.
+     */
+    constructor(xml: Uint8Array, env: string, now: string, roots_json: Uint8Array | null | undefined, grace_seconds: number);
+    /**
+     * The state of the trust material: `{"result","error","sequence_number",…}`.
+     */
+    tsl(): string;
+}
+
+/**
  * `{"schema","certificates":[…]}`: every certificate in `input` (DER or PEM) as `ti pki
  * inspect` describes it at `now` (RFC 3339).
  *
@@ -40,8 +72,12 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 
 export interface InitOutput {
     readonly memory: WebAssembly.Memory;
+    readonly __wbg_trustcontext_free: (a: number, b: number) => void;
     readonly describe_certificate: (a: number, b: number, c: number, d: number, e: number) => void;
     readonly trust_urls: (a: number, b: number, c: number) => void;
+    readonly trustcontext_check: (a: number, b: number, c: number, d: number, e: number, f: number) => void;
+    readonly trustcontext_new: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number, j: number) => void;
+    readonly trustcontext_tsl: (a: number, b: number) => void;
     readonly verify_tsl: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number, j: number) => void;
     readonly version: (a: number) => void;
     readonly __wbindgen_add_to_stack_pointer: (a: number) => number;

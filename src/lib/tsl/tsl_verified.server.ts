@@ -17,6 +17,8 @@ export class DownloadError extends Error {}
 export type VerifiedTsl = {
 	view: TslView;
 	xml: Uint8Array;
+	/** roots.json as downloaded; null when it could not be, and the module used its embedded roots. */
+	roots: Uint8Array | null;
 	sources: { tsl: Source; roots: Source | null };
 	wasm: { ti_wasm: string; commit: string; wasm_sha256: string };
 	computed_at: string;
@@ -94,6 +96,7 @@ export async function getVerifiedTsl(env: keyof typeof Atlas.tsl): Promise<Verif
 	const result = verifyTsl(tsl.value, env, now, roots?.value, GRACE_SECONDS).then((view) => ({
 		view,
 		xml: tsl.value,
+		roots: roots?.value ?? null,
 		sources: { tsl: tslSource, roots: rootsSource },
 		wasm: {
 			ti_wasm: version.ti_wasm,

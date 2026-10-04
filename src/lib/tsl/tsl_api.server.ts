@@ -3,7 +3,6 @@ import type { CertificateInfo, ServiceView, TslView } from '$ti-wasm/types';
 import { displayName } from '../x509';
 import { DownloadError, getVerifiedTsl, isTslEnv, type VerifiedTsl } from './tsl_verified.server';
 import type {
-	CertificateFields,
 	Environment,
 	SchemeDetail,
 	ServiceDetail,
@@ -13,6 +12,7 @@ import type {
 	TrustNode,
 	TslSummary
 } from './tsl_api';
+import { certificateFields } from './tsl_api';
 
 /** The verified TSL of `env` for an endpoint: 404 for an unknown environment, 502 if it cannot be downloaded. */
 export async function loadTsl(env: string): Promise<VerifiedTsl> {
@@ -82,25 +82,6 @@ function services(view: TslView): { provider: string; service: ServiceView }[] {
 	return view.providers.flatMap((p) =>
 		p.services.map((service) => ({ provider: p.name, service }))
 	);
-}
-
-function certificateFields(info: CertificateInfo): CertificateFields {
-	return {
-		subject: info.subject,
-		issuer: info.issuer,
-		serial: info.serial,
-		not_before: info.not_before,
-		not_after: info.not_after,
-		expired: info.validity !== 'valid',
-		key: info.key.algorithm,
-		key_status: info.key.status,
-		signature_algorithm: info.signature_algorithm,
-		certificate_type: info.certificate_type,
-		key_usage: [...info.key_usage, ...info.extended_key_usage],
-		ocsp_urls: info.ocsp_urls,
-		sha256: info.sha256,
-		pem: info.pem
-	};
 }
 
 function validityNote(info: CertificateInfo): string {

@@ -34,20 +34,23 @@ in the JSON; a thrown error means a wrong call (unknown environment, bad time, g
 
 ### Layers
 
-| Layer        | File                                 | Does                                                                                                         |
-| ------------ | ------------------------------------ | ------------------------------------------------------------------------------------------------------------ |
-| Module       | `vendor/ti-wasm/`                    | generated; `ti_wasm.js` glue, `ti_wasm_bg.wasm`, `types.d.ts`, JSON schemas, `VERSION.json`                  |
-| Runtime      | `src/lib/ti/ti_wasm.server.ts`       | runs the module in a `worker_threads` worker: `verifyTsl`, `describeCertificate`, `trustUrls`, `wasmVersion` |
-| Verification | `src/lib/tsl/tsl_verified.server.ts` | downloads TSL + roots.json through Valkey, verifies, memoizes the view: `getVerifiedTsl(env)`                |
-| Resources    | `src/lib/tsl/tsl_api.server.ts`      | turns the view into the REST resources; `loadTsl(env)` maps failures to 404/502/500                          |
-| Types        | `src/lib/tsl/tsl_api.ts`             | the REST resource types, shared by endpoints and screens                                                     |
-| REST         | `src/routes/api/tsl/**/+server.ts`   | thin: `loadTsl` + one builder + `json()`                                                                     |
-| Screens      | `src/routes/tsl/**`                  | load the REST resource of the same path (`getResource` in `src/lib/tsl/tsl_fetch.ts`)                        |
+| Layer             | File                                 | Does                                                                                                         |
+| ----------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------ |
+| Module            | `vendor/ti-wasm/`                    | generated; `ti_wasm.js` glue, `ti_wasm_bg.wasm`, `types.d.ts`, JSON schemas, `VERSION.json`                  |
+| Runtime (server)  | `src/lib/ti/ti_wasm.server.ts`       | runs the module in a `worker_threads` worker: `verifyTsl`, `describeCertificate`, `trustUrls`, `wasmVersion` |
+| Runtime (browser) | `src/lib/ti/ti_wasm.client.ts`       | `openChecker(env, xml, roots)`: a `TrustContext` verified once, then `check(bytes)` per certificate          |
+| Verification      | `src/lib/tsl/tsl_verified.server.ts` | downloads TSL + roots.json through Valkey, verifies, memoizes the view: `getVerifiedTsl(env)`                |
+| Resources         | `src/lib/tsl/tsl_api.server.ts`      | turns the view into the REST resources; `loadTsl(env)` maps failures to 404/502/500                          |
+| Types             | `src/lib/tsl/tsl_api.ts`             | the REST resource types, shared by endpoints and screens                                                     |
+| REST              | `src/routes/api/tsl/**/+server.ts`   | thin: `loadTsl` + one builder + `json()`                                                                     |
+| Screens           | `src/routes/tsl/**`                  | load the REST resource of the same path (`getResource` in `src/lib/tsl/tsl_fetch.ts`)                        |
 
 Rules:
 
-- **Only the server touches the module.** Import from `ti_wasm.server.ts`; never import
-  `vendor/ti-wasm/ti_wasm.js` into a component or a universal `+page.ts`. Type-only imports from
+- **The server's module lives in `ti_wasm.server.ts`, the browser's in `ti_wasm.client.ts`.** Only
+  the Check screen (`/tsl/{env}/check`) uses the browser one, through a dynamic
+  `import('$lib/ti/ti_wasm.client')` in `onMount`, so the 1.3 MB module is fetched there only and
+  never during SSR. Do not import `vendor/ti-wasm/ti_wasm.js` anywhere else. Type-only imports from
   `$ti-wasm/types` (alias in `svelte.config.js`) are fine anywhere.
 - **The worker is deliberate.** A verification takes ~250 ms (it would block the event loop), and
   the module aborts on a Rust panic (a WebAssembly trap), after which its instance is unusable. The
@@ -83,15 +86,16 @@ resources built from it.
 Every TSL screen has a REST resource at the same path under `/api`, its tab is the path segment,
 and the breadcrumb follows the path. Keep it that way when adding anything.
 
-| Breadcrumb                | Screen                                 | REST                                                   |
-| ------------------------- | -------------------------------------- | ------------------------------------------------------ |
-| Trusted Lists             | `/tsl`                                 | `/api/tsl`                                             |
-| Trusted Lists › Produktiv | `/tsl/{env}` → redirects to `services` | `/api/tsl/{env}` (summary, header of every TSL screen) |
-| … › Services              | `/tsl/{env}/services`                  | `/api/tsl/{env}/services`                              |
-| … › Services › {name}     | `/tsl/{env}/services/{id}`             | `/api/tsl/{env}/services/{id}`                         |
-| … › Signature             | `/tsl/{env}/signature`                 | `/api/tsl/{env}/signature`                             |
-| … › Scheme                | `/tsl/{env}/scheme`                    | `/api/tsl/{env}/scheme`                                |
-| –                         | link on the Signature tab              | `/api/tsl/{env}/xml` (the bytes as verified)           |
+| Breadcrumb                | Screen                                 | REST                                                                     |
+| ------------------------- | -------------------------------------- | ------------------------------------------------------------------------ |
+| Trusted Lists             | `/tsl`                                 | `/api/tsl`                                                               |
+| Trusted Lists › Produktiv | `/tsl/{env}` → redirects to `services` | `/api/tsl/{env}` (summary, header of every TSL screen)                   |
+| … › Services              | `/tsl/{env}/services`                  | `/api/tsl/{env}/services`                                                |
+| … › Services › {name}     | `/tsl/{env}/services/{id}`             | `/api/tsl/{env}/services/{id}`                                           |
+| … › Signature             | `/tsl/{env}/signature`                 | `/api/tsl/{env}/signature`                                               |
+| … › Scheme                | `/tsl/{env}/scheme`                    | `/api/tsl/{env}/scheme`                                                  |
+| … › Check                 | `/tsl/{env}/check`                     | none: the check runs in the browser on `/api/tsl/{env}/xml` and `/roots` |
+| –                         | link on the Signature tab              | `/api/tsl/{env}/xml` and `/roots` (the bytes as verified)                |
 
 `src/routes/tsl/[env]/+layout.svelte` renders breadcrumb, header line and tabs for all of them;
 a detail page adds its last breadcrumb item by returning `title` from its `load`.
@@ -103,6 +107,20 @@ To add a tab: add the builder to `tsl_api.server.ts` and the type to `tsl_api.ts
 `/api/tsl/{env}/qes` (BNetzA list) is the one TSL path not verified by ti-wasm: it is parsed
 with JSDOM in `src/lib/tsl/tsl_qes.server.ts` (types in `tsl_qes.ts`) and served as published.
 Do not use that parser for the TI TSL.
+
+## Certificate check in the browser
+
+`/tsl/{env}/check` checks certificates the user drops or pastes without sending them anywhere:
+the page fetches the TSL and roots.json bytes, verifies them once in a `TrustContext` (~100 ms),
+and checks each certificate in a few milliseconds, as `ti pki verify --profile auto --offline`
+would. The report (`CheckReport` in `vendor/ti-wasm/types.d.ts`, schema `check.json`) carries the
+verdict, profile, type, findings and a `tree` in the same node shape as the TSL resources, so it
+renders with `TrustTree`; CAs that are services of the list link to their page. Revocation is not
+checked (OCSP responders are plain HTTP without CORS); the screen says so. Keep certificate bytes
+in the browser: no endpoint may receive them.
+
+The dev server serves `vendor/ti-wasm/ti_wasm_bg.wasm` because `vite.config.ts` allows `vendor`;
+a build emits the module as a hashed asset served as `application/wasm`.
 
 ## UI rules
 

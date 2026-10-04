@@ -1,5 +1,7 @@
 // The REST resources under /api/tsl, one per screen under /tsl: the paths are the same.
 
+import type { CertificateInfo } from '$ti-wasm/types';
+
 export type Environment = 'test' | 'ref' | 'prod';
 
 export type Finding = {
@@ -154,3 +156,23 @@ export type SchemeDetail = {
 	primary_location: string | null;
 	backup_location: string | null;
 };
+
+/** The fields the screens show of a certificate the module describes. */
+export function certificateFields(info: CertificateInfo): CertificateFields {
+	return {
+		subject: info.subject,
+		issuer: info.issuer,
+		serial: info.serial,
+		not_before: info.not_before,
+		not_after: info.not_after,
+		expired: info.validity !== 'valid',
+		key: info.key.algorithm,
+		key_status: info.key.status,
+		signature_algorithm: info.signature_algorithm,
+		certificate_type: info.certificate_type,
+		key_usage: [...info.key_usage, ...info.extended_key_usage],
+		ocsp_urls: info.ocsp_urls,
+		sha256: info.sha256,
+		pem: info.pem
+	};
+}

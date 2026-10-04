@@ -23,5 +23,8 @@ const forceEsbuildCssMinify = (): Plugin => ({
 });
 
 export default defineConfig({
-	plugins: [sveltekit(), forceEsbuildCssMinify()]
+	plugins: [sveltekit(), forceEsbuildCssMinify()],
+	// The Check screen loads vendor/ti-wasm/ti_wasm_bg.wasm in the browser; the dev server only
+	// serves files under its allow list (a build emits the module as an asset instead).
+	server: { fs: { allow: ['vendor'] } }
 });

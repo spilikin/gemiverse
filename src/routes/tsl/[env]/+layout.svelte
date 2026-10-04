@@ -12,7 +12,8 @@
 	const tabs = [
 		{ path: 'services', route: '/tsl/[env]/services', label: 'Services' },
 		{ path: 'signature', route: '/tsl/[env]/signature', label: 'Signature' },
-		{ path: 'scheme', route: '/tsl/[env]/scheme', label: 'Scheme' }
+		{ path: 'scheme', route: '/tsl/[env]/scheme', label: 'Scheme' },
+		{ path: 'check', route: '/tsl/[env]/check', label: 'Check' }
 	] as const;
 
 	const section = $derived(page.url.pathname.split('/')[3] ?? 'services');

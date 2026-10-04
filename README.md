@@ -19,7 +19,8 @@ npm run dev -- --open
 
 ## TSL verification (ti-wasm)
 
-The TSL screens (`/tsl/{env}/services`, `/services/{id}`, `/signature`, `/scheme`) and their REST
+The TSL screens (`/tsl/{env}/services`, `/services/{id}`, `/signature`, `/scheme`, and `/check`, which
+checks certificates in the browser) and their REST
 resources at the same paths under `/api/tsl` (plus `/api/tsl/{env}/xml`) verify the TSL with the ti-wasm module in `vendor/ti-wasm`: signature, signer, roots and the chain
 of every service certificate. The module is built in
 [zero-lab](https://github.com/gematik/zero-lab/tree/main/rust/ti-wasm) and committed here; do not

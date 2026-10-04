@@ -1,6 +1,122 @@
 /* @ts-self-types="./ti_wasm.d.ts" */
 
 /**
+ * One environment's TSL and roots, verified once, to check any number of certificates
+ * against (`schemas/check.json`). An invalid list is not an error: every check against
+ * it reports it.
+ */
+export class TrustContext {
+    __destroy_into_raw() {
+        const ptr = this.__wbg_ptr;
+        this.__wbg_ptr = 0;
+        TrustContextFinalization.unregister(this);
+        return ptr;
+    }
+    free() {
+        const ptr = this.__destroy_into_raw();
+        wasm.__wbg_trustcontext_free(ptr, 0);
+    }
+    /**
+     * The report on `input` (PEM with the end entity first and any intermediates after
+     * it, or one DER certificate) at `now` (RFC 3339).
+     *
+     * # Errors
+     *
+     * A bad time, or no certificate in `input`.
+     * @param {Uint8Array} input
+     * @param {string} now
+     * @returns {string}
+     */
+    check(input, now) {
+        let deferred4_0;
+        let deferred4_1;
+        try {
+            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+            const ptr0 = passArray8ToWasm0(input, wasm.__wbindgen_export);
+            const len0 = WASM_VECTOR_LEN;
+            const ptr1 = passStringToWasm0(now, wasm.__wbindgen_export, wasm.__wbindgen_export2);
+            const len1 = WASM_VECTOR_LEN;
+            wasm.trustcontext_check(retptr, this.__wbg_ptr, ptr0, len0, ptr1, len1);
+            var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+            var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+            var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
+            var r3 = getDataViewMemory0().getInt32(retptr + 4 * 3, true);
+            var ptr3 = r0;
+            var len3 = r1;
+            if (r3) {
+                ptr3 = 0; len3 = 0;
+                throw takeObject(r2);
+            }
+            deferred4_0 = ptr3;
+            deferred4_1 = len3;
+            return getStringFromWasm0(ptr3, len3);
+        } finally {
+            wasm.__wbindgen_add_to_stack_pointer(16);
+            wasm.__wbindgen_export3(deferred4_0, deferred4_1, 1);
+        }
+    }
+    /**
+     * Verifies `xml` as the TSL of `env` at `now` (RFC 3339), with `roots_json` as
+     * fresher roots if given and `grace_seconds` past `NextUpdate` tolerated.
+     *
+     * # Errors
+     *
+     * An unknown environment, a bad time or a grace period over 30 days.
+     * @param {Uint8Array} xml
+     * @param {string} env
+     * @param {string} now
+     * @param {Uint8Array | null | undefined} roots_json
+     * @param {number} grace_seconds
+     */
+    constructor(xml, env, now, roots_json, grace_seconds) {
+        try {
+            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+            const ptr0 = passArray8ToWasm0(xml, wasm.__wbindgen_export);
+            const len0 = WASM_VECTOR_LEN;
+            const ptr1 = passStringToWasm0(env, wasm.__wbindgen_export, wasm.__wbindgen_export2);
+            const len1 = WASM_VECTOR_LEN;
+            const ptr2 = passStringToWasm0(now, wasm.__wbindgen_export, wasm.__wbindgen_export2);
+            const len2 = WASM_VECTOR_LEN;
+            var ptr3 = isLikeNone(roots_json) ? 0 : passArray8ToWasm0(roots_json, wasm.__wbindgen_export);
+            var len3 = WASM_VECTOR_LEN;
+            wasm.trustcontext_new(retptr, ptr0, len0, ptr1, len1, ptr2, len2, ptr3, len3, grace_seconds);
+            var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+            var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+            var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
+            if (r2) {
+                throw takeObject(r1);
+            }
+            this.__wbg_ptr = r0;
+            TrustContextFinalization.register(this, this.__wbg_ptr, this);
+            return this;
+        } finally {
+            wasm.__wbindgen_add_to_stack_pointer(16);
+        }
+    }
+    /**
+     * The state of the trust material: `{"result","error","sequence_number",…}`.
+     * @returns {string}
+     */
+    tsl() {
+        let deferred1_0;
+        let deferred1_1;
+        try {
+            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+            wasm.trustcontext_tsl(retptr, this.__wbg_ptr);
+            var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+            var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+            deferred1_0 = r0;
+            deferred1_1 = r1;
+            return getStringFromWasm0(r0, r1);
+        } finally {
+            wasm.__wbindgen_add_to_stack_pointer(16);
+            wasm.__wbindgen_export3(deferred1_0, deferred1_1, 1);
+        }
+    }
+}
+if (Symbol.dispose) TrustContext.prototype[Symbol.dispose] = TrustContext.prototype.free;
+
+/**
  * `{"schema","certificates":[…]}`: every certificate in `input` (DER or PEM) as `ti pki
  * inspect` describes it at `now` (RFC 3339).
  *
@@ -151,12 +267,19 @@ function __wbg_get_imports() {
             const ret = Error(getStringFromWasm0(arg0, arg1));
             return addHeapObject(ret);
         },
+        __wbg___wbindgen_throw_5d9e815e6fdf150f: function(arg0, arg1) {
+            throw new Error(getStringFromWasm0(arg0, arg1));
+        },
     };
     return {
         __proto__: null,
         "./ti_wasm_bg.js": import0,
     };
 }
+
+const TrustContextFinalization = (typeof FinalizationRegistry === 'undefined')
+    ? { register: () => {}, unregister: () => {} }
+    : new FinalizationRegistry(ptr => wasm.__wbg_trustcontext_free(ptr, 1));
 
 function addHeapObject(obj) {
     if (heap_next === heap.length) heap.push(heap.length + 1);
